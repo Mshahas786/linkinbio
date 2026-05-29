@@ -32,3 +32,5 @@ export const PRICE_TIERS = {
     ],
   },
 } as const
+
+export type PriceTier = (typeof PRICE_TIERS)[keyof typeof PRICE_TIERS]
