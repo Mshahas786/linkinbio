@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { themes, buttonStyles, avatarShapes } from "@/lib/themes"
 
 interface LinkData {
   id: string
@@ -20,6 +21,11 @@ interface PublicProfileProps {
   theme: string
   accentColor: string
   showBranding: boolean
+  buttonStyle?: string
+  bioAlignment?: string
+  buttonTextColor?: string | null
+  backgroundColor?: string | null
+  avatarShape?: string
   links: LinkData[]
   isPro: boolean
 }
@@ -40,10 +46,22 @@ export function PublicProfile({
   name,
   bio,
   avatarUrl,
+  theme: themeId,
   accentColor,
   showBranding,
+  buttonStyle: buttonStyleId = "rounded",
+  bioAlignment = "center",
+  buttonTextColor,
+  backgroundColor: customBg,
+  avatarShape: avatarShapeId = "circle",
   links,
 }: PublicProfileProps) {
+  const activeTheme = themes.find((t) => t.id === themeId) || themes[0]
+  const activeButtonStyle = buttonStyles.find((b) => b.id === buttonStyleId) || buttonStyles[0]
+  const activeAvatarShape = avatarShapes.find((a) => a.id === avatarShapeId) || avatarShapes[0]
+  const bgGradient = customBg ? "" : `bg-gradient-to-b ${activeTheme.background}`
+  const bgStyle = customBg ? { backgroundColor: customBg } : {}
+
   useEffect(() => {
     document.documentElement.style.setProperty("--accent", accentColor)
   }, [accentColor])
@@ -55,18 +73,18 @@ export function PublicProfile({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
-      <div className="max-w-md mx-auto text-center">
+    <div className={`min-h-screen ${bgGradient} py-12 px-4`} style={bgStyle}>
+      <div className={`max-w-md mx-auto ${bioAlignment === "left" ? "text-left" : "text-center"}`}>
         {avatarUrl && (
           <img
             src={avatarUrl}
             alt={name}
-            className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 shadow-md"
+            className={`w-24 h-24 mx-auto mb-4 object-cover border-4 shadow-md ${activeAvatarShape.className} ${bioAlignment === "left" ? "ml-0" : ""}`}
             style={{ borderColor: accentColor }}
           />
         )}
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{name}</h1>
-        {bio && <p className="text-gray-600 mb-6">{bio}</p>}
+        <h1 className={`text-2xl font-bold mb-1 ${activeTheme.textClass}`}>{name}</h1>
+        {bio && <p className={`text-gray-600 mb-6 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
         <div className="space-y-3">
           {links.map((link) => (
             <a
@@ -75,8 +93,8 @@ export function PublicProfile({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackClick(link.id)}
-              className="block w-full py-3 px-6 rounded-xl text-center font-medium transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm"
-              style={{ backgroundColor: accentColor, color: "#fff" }}
+              className={`block w-full py-3 px-6 text-center font-medium transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm ${activeButtonStyle.className}`}
+              style={{ backgroundColor: accentColor, color: buttonTextColor || "#fff" }}
             >
               {link.icon && <span className="mr-2">{link.icon}</span>}
               {link.title}
@@ -84,7 +102,7 @@ export function PublicProfile({
           ))}
         </div>
         {showBranding && (
-          <p className="mt-8 text-xs text-gray-400">
+          <p className={`mt-8 text-xs text-gray-400`}>
             Powered by{" "}
             <a href="/" className="underline hover:text-gray-600">Flolio</a>
           </p>

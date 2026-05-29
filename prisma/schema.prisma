@@ -20,8 +20,13 @@ model User {
   socialImage   String?
   theme         String   @default("default")
   accentColor   String   @default("#6366f1")
-  showBranding  Boolean  @default(true)
-  customDomain  String?  @unique
+  showBranding    Boolean  @default(true)
+  buttonStyle     String   @default("rounded")
+  bioAlignment    String   @default("center")
+  buttonTextColor String?
+  backgroundColor String?
+  avatarShape     String   @default("circle")
+  customDomain    String?  @unique
   domainVerified Boolean @default(false)
   referralCode  String?  @unique
   referralCount Int      @default(0)

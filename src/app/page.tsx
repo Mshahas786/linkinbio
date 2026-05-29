@@ -7,7 +7,7 @@ import prisma from "@/lib/prisma"
 
 const faqs = [
   { q: "What is Flolio?", a: "Flolio lets you create a single, beautiful page with all your important links. Perfect for your Instagram, TikTok, Twitter, or any social media bio." },
-  { q: "Is there a free plan?", a: "Yes! The Free plan includes up to 15 links, 3 themes, custom colors, and basic analytics. No credit card required." },
+  { q: "Is there a free plan?", a: "Yes! The Free plan includes up to 15 links, 5 themes, custom colors, and basic analytics. No credit card required." },
   { q: "How does billing work?", a: "Pro is $2/month. You can upgrade, downgrade, or cancel anytime. You'll get a prorated refund if you downgrade mid-cycle." },
   { q: "Can I use my own domain?", a: "Yes, Pro users can connect their own custom domain to their Flolio page." },
   { q: "How do I remove branding for free?", a: "Refer 3 friends to Flolio and you'll unlock branding removal — even on the Free plan." },
@@ -157,7 +157,7 @@ export default async function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Palette, title: "Beautiful Themes", desc: "Choose from 5 professionally designed themes. Customize colors to match your brand perfectly." },
+              { icon: Palette, title: "Beautiful Themes", desc: "Choose from 10 professionally designed themes. Customize colors to match your brand perfectly." },
               { icon: BarChart3, title: "Click Analytics", desc: "Track every click. Know which links perform best and understand your audience better." },
               { icon: Globe, title: "Custom Domain", desc: "Use your own domain name. Make your page truly yours with a professional touch." },
               { icon: QrCode, title: "QR Codes", desc: "Every link gets its own QR code. Download and share anywhere. Pro feature." },

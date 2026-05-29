@@ -5,7 +5,7 @@ export const PRICE_TIERS = {
     maxLinks: 15,
     features: [
       "Up to 15 links",
-      "3 themes to choose from",
+      "5 themes to choose from",
       "Custom accent color",
       "Basic click tracking",
       "Profile bio & avatar",
@@ -20,7 +20,7 @@ export const PRICE_TIERS = {
     maxLinks: -1,
     features: [
       "Unlimited links",
-      "All 5 themes",
+      "All 10 themes",
       "No Flolio branding",
       "Detailed analytics",
       "QR codes per link",

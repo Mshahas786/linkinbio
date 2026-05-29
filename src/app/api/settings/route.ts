@@ -21,6 +21,11 @@ export async function GET() {
       theme: true,
       accentColor: true,
       showBranding: true,
+      buttonStyle: true,
+      bioAlignment: true,
+      buttonTextColor: true,
+      backgroundColor: true,
+      avatarShape: true,
       customDomain: true,
       domainVerified: true,
     },
@@ -36,7 +41,7 @@ export async function PATCH(req: Request) {
   }
 
   const data = await req.json()
-  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding"]
+  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape"]
 
   const updateData: Record<string, any> = {}
   for (const key of allowed) {

@@ -68,6 +68,11 @@ export default async function UserProfilePage({ params }: { params: { username: 
       theme={user.theme}
       accentColor={user.accentColor}
       showBranding={user.showBranding}
+      buttonStyle={user.buttonStyle}
+      bioAlignment={user.bioAlignment}
+      buttonTextColor={user.buttonTextColor}
+      backgroundColor={user.backgroundColor}
+      avatarShape={user.avatarShape}
       links={activeLinks.map((l) => ({
         id: l.id,
         title: l.title,
