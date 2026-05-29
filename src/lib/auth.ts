@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
 
       if (dbUser) {
         token.id = dbUser.id
-        token.username = dbUser.username
+        token.username = dbUser.username || ""
         token.isPro = dbUser.subscription?.status === "active"
       }
 

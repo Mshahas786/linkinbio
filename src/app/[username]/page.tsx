@@ -23,10 +23,10 @@ export async function generateMetadata({ params }: { params: { username: string 
   }
 
   return {
-    title: `${user.name || user.username} | Flolio`,
-    description: user.bio || `Check out ${user.name || user.username}'s links`,
+    title: `${user.name || user.username || "Flolio"} | Flolio`,
+    description: user.bio || `Check out ${user.name || user.username || "this creator"}'s links`,
     openGraph: {
-      title: `${user.name || user.username} | Flolio`,
+      title: `${user.name || user.username || "Flolio"} | Flolio`,
       description: user.bio || undefined,
       images: images.length > 0 ? images : undefined,
     },
@@ -62,7 +62,7 @@ export default async function UserProfilePage({ params }: { params: { username: 
 
   return (
     <PublicProfile
-      name={user.name || user.username}
+      name={user.name || user.username || "User"}
       bio={user.bio || undefined}
       avatarUrl={user.avatarUrl || undefined}
       theme={user.theme}

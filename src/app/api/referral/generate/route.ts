@@ -19,7 +19,7 @@ export async function GET() {
   }
 
   if (!user.referralCode) {
-    const code = `${user.username}-${Math.random().toString(36).substring(2, 6)}`
+    const code = `${user.username || "user"}-${Math.random().toString(36).substring(2, 6)}`
     user = await prisma.user.update({
       where: { id: session.user.id },
       data: { referralCode: code },

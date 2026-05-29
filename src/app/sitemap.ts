@@ -13,12 +13,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let userPages: MetadataRoute.Sitemap = []
   try {
     const users = await prisma.user.findMany({
-      where: { username: { not: null as any } },
+      where: { username: { not: null } },
       select: { username: true, updatedAt: true },
       take: 1000,
     })
     userPages = users.map((user) => ({
-      url: `${baseUrl}/${user.username}`,
+      url: `${baseUrl}/${user.username!}`,
       lastModified: user.updatedAt,
       changeFrequency: "weekly" as const,
       priority: 0.6,
