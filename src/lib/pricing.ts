@@ -9,7 +9,7 @@ export const PRICE_TIERS = {
       "Custom accent color",
       "Basic click tracking",
       "Profile bio & avatar",
-      "Linkinbio branding",
+      "Flolio branding",
       "Standard support",
     ],
   },
@@ -21,7 +21,7 @@ export const PRICE_TIERS = {
     features: [
       "Unlimited links",
       "All 5 themes",
-      "No Linkinbio branding",
+      "No Flolio branding",
       "Detailed analytics",
       "QR codes per link",
       "Link scheduling",

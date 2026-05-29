@@ -23,10 +23,10 @@ export async function generateMetadata({ params }: { params: { username: string 
   }
 
   return {
-    title: `${user.name || user.username} | Linkinbio`,
+    title: `${user.name || user.username} | Flolio`,
     description: user.bio || `Check out ${user.name || user.username}'s links`,
     openGraph: {
-      title: `${user.name || user.username} | Linkinbio`,
+      title: `${user.name || user.username} | Flolio`,
       description: user.bio || undefined,
       images: images.length > 0 ? images : undefined,
     },

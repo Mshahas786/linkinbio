@@ -71,7 +71,7 @@ function RegisterForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <Link href="/" className="text-xl font-bold text-indigo-600 mb-2 block">Linkinbio</Link>
+        <Link href="/" className="text-xl font-bold text-indigo-600 mb-2 block">Flolio</Link>
         <CardTitle>Create your account</CardTitle>
         <CardDescription>Get your link-in-bio page in minutes</CardDescription>
       </CardHeader>

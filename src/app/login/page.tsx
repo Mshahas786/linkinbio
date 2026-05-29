@@ -40,7 +40,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link href="/" className="text-xl font-bold text-indigo-600 mb-2 block">
-            Linkinbio
+            Flolio
           </Link>
           <CardTitle>Welcome back</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>

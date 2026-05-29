@@ -63,13 +63,13 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4">
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
-          <CardTitle>Welcome to Linkinbio!</CardTitle>
+          <CardTitle>Welcome to Flolio!</CardTitle>
           <CardDescription>Choose your unique username to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Your Linkinbio URL</label>
+              <label className="text-sm font-medium">Your Flolio URL</label>
               <div className="flex items-center rounded-md border border-input bg-background px-3">
                 <span className="text-muted-foreground text-sm shrink-0">yoursite.com/</span>
                 <input

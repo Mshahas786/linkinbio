@@ -6,7 +6,7 @@ import { Providers } from "@/components/providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Linkinbio - Your Links in One Place",
+  title: "Flolio - Your Links in One Place",
   description: "Create your personalized link-in-bio page. Share all your important links with one URL.",
 }
 

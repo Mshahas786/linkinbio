@@ -172,7 +172,7 @@ export default function SettingsPage() {
           </CardTitle>
           <CardDescription>
             {isPro
-              ? "Connect your own domain to your Linkinbio page"
+              ? "Connect your own domain to your Flolio page"
               : "Upgrade to Pro to use a custom domain"}
           </CardDescription>
         </CardHeader>
@@ -283,7 +283,7 @@ export default function SettingsPage() {
           </CardTitle>
           <CardDescription>
             {brandingUnlocked
-              ? "You've unlocked the ability to remove Linkinbio branding! Check the Appearance page."
+              ? "You've unlocked the ability to remove Flolio branding! Check the Appearance page."
               : `Refer 3 friends to unlock branding removal. You've referred ${referralCount}/3.`}
           </CardDescription>
         </CardHeader>

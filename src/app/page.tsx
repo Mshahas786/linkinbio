@@ -6,11 +6,11 @@ import { TestimonialCarousel } from "@/components/home/testimonial-carousel"
 import prisma from "@/lib/prisma"
 
 const faqs = [
-  { q: "What is Linkinbio?", a: "Linkinbio lets you create a single, beautiful page with all your important links. Perfect for your Instagram, TikTok, Twitter, or any social media bio." },
+  { q: "What is Flolio?", a: "Flolio lets you create a single, beautiful page with all your important links. Perfect for your Instagram, TikTok, Twitter, or any social media bio." },
   { q: "Is there a free plan?", a: "Yes! The Free plan includes up to 15 links, 3 themes, custom colors, and basic analytics. No credit card required." },
   { q: "How does billing work?", a: "Pro is $2/month. You can upgrade, downgrade, or cancel anytime. You'll get a prorated refund if you downgrade mid-cycle." },
-  { q: "Can I use my own domain?", a: "Yes, Pro users can connect their own custom domain to their Linkinbio page." },
-  { q: "How do I remove branding for free?", a: "Refer 3 friends to Linkinbio and you'll unlock branding removal — even on the Free plan." },
+  { q: "Can I use my own domain?", a: "Yes, Pro users can connect their own custom domain to their Flolio page." },
+  { q: "How do I remove branding for free?", a: "Refer 3 friends to Flolio and you'll unlock branding removal — even on the Free plan." },
   { q: "What payment methods do you accept?", a: "We accept all major credit cards via Stripe. Payments are processed securely." },
 ]
 
@@ -34,7 +34,7 @@ export default async function HomePage() {
       <header className="border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Linkinbio
+            Flolio
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/login">
@@ -116,7 +116,7 @@ export default async function HomePage() {
                         </div>
                       ))}
                     </div>
-                    <p className="text-[10px] text-gray-400 text-center mt-6">Powered by Linkinbio</p>
+                    <p className="text-[10px] text-gray-400 text-center mt-6">Powered by Flolio</p>
                   </div>
                 </div>
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl -z-10" />
@@ -132,7 +132,7 @@ export default async function HomePage() {
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
               <p className="text-4xl md:text-5xl font-bold text-white">{displayUsers.toLocaleString()}</p>
-              <p className="text-indigo-200 mt-1 text-sm">Creators on Linkinbio</p>
+              <p className="text-indigo-200 mt-1 text-sm">Creators on Flolio</p>
             </div>
             <div>
               <p className="text-4xl md:text-5xl font-bold text-white">{displayLinks.toLocaleString()}</p>
@@ -189,7 +189,7 @@ export default async function HomePage() {
             {[
               { step: "01", title: "Create your account", desc: "Sign up free with your email or Google/GitHub. No credit card needed." },
               { step: "02", title: "Add your links", desc: "Paste your URLs, give them titles, and rearrange with drag and drop." },
-              { step: "03", title: "Share your page", desc: "Copy your unique Linkinbio URL and put it in your social media bio." },
+              { step: "03", title: "Share your page", desc: "Copy your unique Flolio URL and put it in your social media bio." },
             ].map((s) => (
               <div key={s.step} className="text-center">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white text-xl font-bold flex items-center justify-center mx-auto mb-5 shadow-lg shadow-indigo-200">{s.step}</div>
@@ -296,7 +296,7 @@ export default async function HomePage() {
         <div className="absolute bottom-0 right-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 translate-x-1/2" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Ready to level up your link in bio?</h2>
-          <p className="text-xl text-indigo-100 mb-8">Join {displayUsers.toLocaleString()}+ creators who use Linkinbio. It&apos;s free to start.</p>
+          <p className="text-xl text-indigo-100 mb-8">Join {displayUsers.toLocaleString()}+ creators who use Flolio. It&apos;s free to start.</p>
           <Link href="/register">
             <Button size="lg" className="text-base px-10 h-14 bg-white text-indigo-700 hover:bg-indigo-50 shadow-2xl shadow-indigo-900/30">
               Create Your Free Page
@@ -310,7 +310,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div className="md:col-span-2">
-              <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Linkinbio</Link>
+              <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Flolio</Link>
               <p className="mt-3 text-sm max-w-xs">The modern link-in-bio platform for creators who care about how they present themselves online.</p>
             </div>
             <div>
@@ -330,7 +330,7 @@ export default async function HomePage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-sm text-center">&copy; {new Date().getFullYear()} Linkinbio. All rights reserved.</div>
+          <div className="border-t border-gray-800 pt-8 text-sm text-center">&copy; {new Date().getFullYear()} Flolio. All rights reserved.</div>
         </div>
       </footer>
     </div>

@@ -169,7 +169,7 @@ export default function AppearancePage() {
           <CardTitle className="text-lg">Branding</CardTitle>
           <CardDescription>
             {canToggleBranding
-              ? "Toggle the 'Powered by Linkinbio' badge on your page"
+              ? "Toggle the 'Powered by Flolio' badge on your page"
               : brandingUnlocked
               ? "You've unlocked branding removal via referrals!"
               : "Upgrade to Pro or refer 3 friends to remove branding"}
@@ -184,7 +184,7 @@ export default function AppearancePage() {
               disabled={!canToggleBranding}
               className="w-4 h-4 rounded border-gray-300 text-indigo-600 disabled:opacity-50"
             />
-            <span className="text-sm">Show &quot;Powered by Linkinbio&quot; on my page</span>
+            <span className="text-sm">Show &quot;Powered by Flolio&quot; on my page</span>
           </label>
           {!canToggleBranding && (
             <p className="text-xs text-muted-foreground mt-2">

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
 
 const testimonials = [
-  { name: "Alex Chen", handle: "@alexcreates", text: "Linkinbio doubled my link engagement. The analytics alone are worth the Pro plan.", avatar: "AC" },
+  { name: "Alex Chen", handle: "@alexcreates", text: "Flolio doubled my link engagement. The analytics alone are worth the Pro plan.", avatar: "AC" },
   { name: "Sarah Martinez", handle: "@sarahm", text: "Finally a link-in-bio tool that doesn't look like spam. Clean, fast, and beautiful.", avatar: "SM" },
   { name: "Jordan Lee", handle: "@jordanlee", text: "I switched from Linktree and wish I did it sooner. The customization is next level.", avatar: "JL" },
   { name: "Priya Patel", handle: "@priyadesigns", text: "At $2/mo for Pro with custom domain, it's a no-brainer. Best value in the market.", avatar: "PP" },

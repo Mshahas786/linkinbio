@@ -86,7 +86,7 @@ export function PublicProfile({
         {showBranding && (
           <p className="mt-8 text-xs text-gray-400">
             Powered by{" "}
-            <a href="/" className="underline hover:text-gray-600">Linkinbio</a>
+            <a href="/" className="underline hover:text-gray-600">Flolio</a>
           </p>
         )}
       </div>

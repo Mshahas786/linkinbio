@@ -32,7 +32,7 @@ export function Sidebar({ username }: { username: string }) {
     <div className="w-64 border-r bg-gray-50/50 flex flex-col h-screen sticky top-0">
       <div className="p-4 border-b">
         <Link href="/dashboard" className="text-lg font-bold text-indigo-600">
-          Linkinbio
+          Flolio
         </Link>
       </div>
       <nav className="flex-1 p-3 space-y-1">
