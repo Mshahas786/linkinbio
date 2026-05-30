@@ -28,7 +28,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ show }}>
       {children}
       {toast && (
-        <div className="fixed bottom-4 right-4 z-50 animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 z-50 animate-in fade-in slide-in-from-bottom-2 sm:max-w-sm">
           <div
             className={`px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white ${
               toast.type === "success" ? "bg-green-600" : "bg-red-600"

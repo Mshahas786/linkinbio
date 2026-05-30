@@ -181,7 +181,7 @@ export default function SettingsPage() {
             <>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Your Domain</label>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Input
                     placeholder="links.yourdomain.com"
                     value={domainInput}
@@ -290,8 +290,8 @@ export default function SettingsPage() {
         <CardContent className="space-y-4">
           {referralCode ? (
             <>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 bg-muted rounded-lg px-3 py-2 text-sm font-mono truncate">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <div className="flex-1 bg-muted rounded-lg px-3 py-2 text-sm font-mono truncate text-center sm:text-left">
                   {window.location.origin}/register?ref={referralCode}
                 </div>
                 <Button variant="outline" size="sm" onClick={copyReferralLink} className="shrink-0">

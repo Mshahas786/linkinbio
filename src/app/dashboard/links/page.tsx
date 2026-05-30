@@ -92,12 +92,12 @@ function SortableLinkCard({
       style={style}
       className={`rounded-lg border bg-card hover:bg-gray-50 transition-colors ${isDragging ? "shadow-lg z-10" : ""}`}
     >
-      <div className="flex items-center gap-3 p-3">
+      <div className="flex items-start gap-3 p-3">
         <button
           ref={setActivatorNodeRef}
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing shrink-0 p-0.5 rounded hover:bg-gray-100"
+          className="cursor-grab active:cursor-grabbing shrink-0 p-0.5 rounded hover:bg-gray-100 mt-0.5"
         >
           <GripVertical className="w-4 h-4 text-muted-foreground" />
         </button>
@@ -105,16 +105,16 @@ function SortableLinkCard({
           <img
             src={link.imageUrl}
             alt=""
-            className="w-10 h-10 rounded object-cover shrink-0"
+            className="w-10 h-10 rounded object-cover shrink-0 mt-0.5"
           />
         )}
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{link.title}</p>
           <p className="text-xs text-muted-foreground truncate">{link.url}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">{link.clicks} clicks</span>
-          <Badge variant={status.variant}>{status.label}</Badge>
+        <div className="flex items-start gap-1 shrink-0">
+          <span className="hidden sm:inline text-xs text-muted-foreground mt-1.5">{link.clicks} clicks</span>
+          <Badge variant={status.variant} className="mt-1.5">{status.label}</Badge>
           {isPro && (
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onToggleExpand(isExpanded ? "" : link.id)}>
               {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -145,7 +145,7 @@ function SortableLinkCard({
             </div>
             <div>
               <p className="text-xs font-medium text-gray-500 mb-1.5 flex items-center gap-1"><Clock className="w-3 h-3" /> Schedule</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="text-[10px] text-muted-foreground">Start at</label>
                   <input
@@ -168,7 +168,7 @@ function SortableLinkCard({
             </div>
             <div>
               <p className="text-xs font-medium text-gray-500 mb-1.5 flex items-center gap-1"><Tag className="w-3 h-3" /> UTM Parameters</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <Input
                   placeholder="utm_source"
                   value={link.utmSource || ""}
@@ -316,13 +316,13 @@ export default function LinksPage() {
           <CardTitle className="text-lg">Add New Link</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-3 items-start">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-start">
             <div className="flex-1 space-y-2">
               <Input placeholder="Link title (e.g. My Twitter)" value={title} onChange={(e) => setTitle(e.target.value)} />
               <Input placeholder="URL (e.g. https://twitter.com/you)" value={url} onChange={(e) => setUrl(e.target.value)} />
               <Input placeholder="Image URL (optional)" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
             </div>
-            <Button onClick={addLink} disabled={adding || !title || !url || (maxLinks !== -1 && links.length >= maxLinks)}>
+            <Button onClick={addLink} disabled={adding || !title || !url || (maxLinks !== -1 && links.length >= maxLinks)} className="shrink-0">
               <Plus className="w-4 h-4 mr-1" /> Add Link
             </Button>
           </div>

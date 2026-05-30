@@ -65,18 +65,18 @@ function SortableSocialCard({
       style={style}
       className={`rounded-lg border bg-card hover:bg-gray-50 transition-colors ${isDragging ? "shadow-lg z-10" : ""}`}
     >
-      <div className="flex items-center gap-3 p-3">
+      <div className="flex items-start gap-3 p-3">
         <button
           ref={setActivatorNodeRef}
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing shrink-0 p-0.5 rounded hover:bg-gray-100"
+          className="cursor-grab active:cursor-grabbing shrink-0 p-0.5 rounded hover:bg-gray-100 mt-0.5"
         >
           <GripVertical className="w-4 h-4 text-muted-foreground" />
         </button>
         {platform && (
           <span
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0 mt-0.5"
             style={{ backgroundColor: platform.color }}
             dangerouslySetInnerHTML={{ __html: platform.icon.replace('fill="currentColor"', 'fill="white"') }}
           />
@@ -90,7 +90,7 @@ function SortableSocialCard({
             placeholder="your handle"
           />
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           <a href={social.url} target="_blank" rel="noopener noreferrer">
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <ExternalLink className="w-3.5 h-3.5" />
@@ -205,7 +205,7 @@ export default function SocialPage() {
           <CardDescription>Select a platform and enter your username or handle</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-3 items-start">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-start">
             <div className="flex-1 space-y-2">
               <div className="flex flex-wrap gap-2">
                 {availablePlatforms.length === 0 ? (
@@ -222,7 +222,7 @@ export default function SocialPage() {
                       }`}
                     >
                       <span
-                        className="w-5 h-5"
+                        className="w-5 h-5 shrink-0"
                         style={{ color: p.color }}
                         dangerouslySetInnerHTML={{ __html: p.icon }}
                       />
@@ -240,7 +240,7 @@ export default function SocialPage() {
               )}
             </div>
             {selectedPlatform && (
-              <Button onClick={addSocial} disabled={adding || !handle}>
+              <Button onClick={addSocial} disabled={adding || !handle} className="shrink-0">
                 <Plus className="w-4 h-4 mr-1" /> Add
               </Button>
             )}

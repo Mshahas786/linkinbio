@@ -64,10 +64,10 @@ export default function AnalyticsPage() {
             <div className="space-y-4">
               {links.map((link) => (
                 <div key={link.id}>
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1 gap-1 sm:gap-0">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-sm font-medium truncate">{link.title}</span>
-                      <Badge variant={link.isActive ? "success" : "secondary"}>
+                      <Badge variant={link.isActive ? "success" : "secondary"} className="shrink-0">
                         {link.isActive ? "Active" : "Paused"}
                       </Badge>
                     </div>

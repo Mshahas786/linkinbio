@@ -15,7 +15,10 @@ import {
   LogOut,
   ExternalLink,
   Share2,
+  Menu,
+  X,
 } from "lucide-react"
+import { useState } from "react"
 
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -29,13 +32,17 @@ const navItems = [
 
 export function Sidebar({ username }: { username: string }) {
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
-  return (
-    <div className="w-64 border-r bg-gray-50/50 flex flex-col h-screen sticky top-0">
-      <div className="p-4 border-b">
-        <Link href="/dashboard" className="text-lg font-bold text-indigo-600">
+  const sidebarContent = (
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b flex items-center justify-between">
+        <Link href="/dashboard" className="text-lg font-bold text-indigo-600" onClick={() => setOpen(false)}>
           Flolio
         </Link>
+        <button className="md:hidden p-1 rounded hover:bg-gray-100" onClick={() => setOpen(false)}>
+          <X className="w-5 h-5" />
+        </button>
       </div>
       <nav className="flex-1 p-3 space-y-1">
         {navItems.map((item) => {
@@ -44,6 +51,7 @@ export function Sidebar({ username }: { username: string }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setOpen(false)}
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                 isActive
@@ -63,6 +71,7 @@ export function Sidebar({ username }: { username: string }) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 transition-colors"
+          onClick={() => setOpen(false)}
         >
           <ExternalLink className="w-4 h-4" />
           View Page
@@ -76,5 +85,29 @@ export function Sidebar({ username }: { username: string }) {
         </button>
       </div>
     </div>
+  )
+
+  return (
+    <>
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white border shadow-sm hover:bg-gray-50"
+        onClick={() => setOpen(true)}
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
+      {open && (
+        <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />
+      )}
+
+      <div
+        className={cn(
+          "fixed md:sticky top-0 left-0 z-50 w-64 border-r bg-gray-50/50 flex flex-col h-screen transition-transform duration-200",
+          open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        )}
+      >
+        {sidebarContent}
+      </div>
+    </>
   )
 }

@@ -78,16 +78,16 @@ export default async function DashboardPage() {
               {recentLinks.map((link) => (
                 <div
                   key={link.id}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
+                  className="flex items-center justify-between py-2 border-b last:border-0 gap-2"
                 >
-                  <div>
-                    <p className="font-medium text-sm">{link.title}</p>
-                    <p className="text-xs text-muted-foreground truncate max-w-[300px]">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{link.title}</p>
+                    <p className="text-xs text-muted-foreground truncate max-w-[180px] sm:max-w-[300px]">
                       {link.url}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span>{link.clicks} clicks</span>
+                  <div className="flex items-center gap-2 sm:gap-3 text-sm text-muted-foreground shrink-0">
+                    <span className="text-xs sm:text-sm">{link.clicks} clicks</span>
                     <Badge variant={link.isActive ? "success" : "secondary"}>
                       {link.isActive ? "Active" : "Paused"}
                     </Badge>

@@ -164,8 +164,8 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100/80 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+          <Link href="/" className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent shrink-0">
             Flolio
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
@@ -173,13 +173,13 @@ export default async function HomePage() {
             <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-gray-900 transition-colors">FAQ</a>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link href="/login">
-              <Button variant="ghost" className="text-gray-600">Sign In</Button>
+              <Button variant="ghost" className="text-gray-600 text-sm sm:text-base px-3 sm:px-4">Sign In</Button>
             </Link>
             <Link href="/register">
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all hover:scale-[1.02]">
-                Get Started Free
+              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all hover:scale-[1.02] text-sm sm:text-base px-4 sm:px-6">
+                Get Started
               </Button>
             </Link>
           </div>
@@ -195,7 +195,7 @@ export default async function HomePage() {
           <div className="absolute bottom-1/3 right-1/4 w-1.5 h-1.5 bg-pink-400/40 rounded-full animate-float-slow" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-28 md:pt-28 md:pb-36">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-20 md:pt-28 md:pb-36">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 bg-indigo-100/80 text-indigo-700 text-sm font-medium px-4 py-1.5 rounded-full border border-indigo-200/50 backdrop-blur-sm animate-fade-up">
@@ -203,7 +203,7 @@ export default async function HomePage() {
                 The modern link-in-bio platform
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight animate-fade-up" style={{ animationDelay: "100ms" }}>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight animate-fade-up" style={{ animationDelay: "100ms" }}>
                 All your links.
                 <br />
                 <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
@@ -211,28 +211,28 @@ export default async function HomePage() {
                 </span>
               </h1>
 
-              <p className="text-xl text-gray-600 leading-relaxed max-w-lg animate-fade-up" style={{ animationDelay: "200ms" }}>
+              <p className="text-base sm:text-xl text-gray-600 leading-relaxed max-w-lg animate-fade-up" style={{ animationDelay: "200ms" }}>
                 Create a beautiful, customizable page for your bio. Share your content, social profiles, and projects with a single link that actually looks good.
               </p>
 
-              <div className="flex items-center gap-4 animate-fade-up" style={{ animationDelay: "300ms" }}>
-                <Link href="/register">
+              <div className="flex flex-col sm:flex-row items-center gap-3 animate-fade-up" style={{ animationDelay: "300ms" }}>
+                <Link href="/register" className="w-full sm:w-auto">
                   <Button
                     size="lg"
-                    className="text-base px-8 h-13 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200 hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full sm:w-auto text-base px-8 h-13 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200 hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
                     Create Your Free Page
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
-                <a href="#features">
-                  <Button variant="outline" size="lg" className="text-base px-8 h-13 border-gray-200 hover:border-gray-300 hover:bg-gray-50">
+                <a href="#features" className="w-full sm:w-auto">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-8 h-13 border-gray-200 hover:border-gray-300 hover:bg-gray-50">
                     View Demo
                   </Button>
                 </a>
               </div>
 
-              <div className="flex items-center gap-6 text-sm text-gray-500 animate-fade-up" style={{ animationDelay: "400ms" }}>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 animate-fade-up" style={{ animationDelay: "400ms" }}>
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-200" />
                   No credit card
@@ -294,8 +294,8 @@ export default async function HomePage() {
       <section className="relative py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 animate-gradient-shift" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-center">
             {[
               { value: displayUsers, label: "Creators on Flolio", suffix: "+" },
               { value: displayLinks, label: "Links managed", suffix: "+" },
@@ -314,8 +314,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="features" className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="features" className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 text-sm font-medium px-4 py-1.5 rounded-full mb-4 border border-indigo-200/50">
               <Zap className="w-4 h-4" />
@@ -353,8 +353,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-br from-indigo-50/50 to-purple-50/50">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-50/50 to-purple-50/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
               How it works
@@ -400,8 +400,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
               Loved by creators
@@ -449,8 +449,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="pricing" className="py-24 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="pricing" className="py-16 md:py-24 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 text-sm font-medium px-4 py-1.5 rounded-full mb-4 border border-indigo-200/50">
               <Crown className="w-4 h-4" />
@@ -468,10 +468,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="faq" className="py-24">
-        <div className="max-w-3xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+      <section id="faq" className="py-16 md:py-24">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
               Frequently asked questions
             </h2>
             <p className="text-lg text-gray-600">
@@ -498,12 +498,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative py-28 overflow-hidden">
+      <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 animate-gradient-shift" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,255,255,0.08),transparent_60%)]" />
 
-        <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <div className="animate-float">
             <Sparkles className="w-12 h-12 text-white/30 mx-auto mb-6" />
           </div>
@@ -527,8 +527,8 @@ export default async function HomePage() {
       </section>
 
       <footer className="bg-gray-950 text-gray-400">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="grid md:grid-cols-4 gap-10 mb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+          <div className="grid md:grid-cols-4 gap-8 md:gap-10 mb-12">
             <div className="md:col-span-2">
               <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                 Flolio

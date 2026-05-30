@@ -108,7 +108,7 @@ export default function AppearancePage() {
           <CardDescription>Choose a background style for your page</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {themes.map((t) => {
               const isProTheme = proThemes.includes(t.id)
               const isLocked = isProTheme && !isPro
@@ -223,7 +223,7 @@ export default function AppearancePage() {
           <CardDescription>Choose the shape of your link buttons</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {buttonStyles.map((bs) => (
               <button
                 key={bs.id}
@@ -248,7 +248,7 @@ export default function AppearancePage() {
           <CardDescription>How your bio text is aligned</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {alignmentOptions.map((opt) => (
               <button
                 key={opt.id}
@@ -308,7 +308,7 @@ export default function AppearancePage() {
             <CardDescription>Change how your profile picture is displayed</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {avatarShapes.map((shape) => (
                 <button
                   key={shape.id}

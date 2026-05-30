@@ -96,7 +96,7 @@ export function PublicProfile({
         <h1 className={`text-2xl font-bold mb-1 ${activeTheme.textClass}`}>{name}</h1>
         {bio && <p className={`text-gray-600 mb-4 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
         {socialLinks && socialLinks.length > 0 && (
-          <div className={`flex items-center gap-3 mb-6 ${bioAlignment === "left" ? "justify-start" : "justify-center"}`}>
+          <div className={`flex items-center gap-3 mb-6 flex-wrap ${bioAlignment === "left" ? "justify-start" : "justify-center"}`}>
             {socialLinks.map((sl) => {
               const platform = getSocialPlatform(sl.platform)
               if (!platform) return null
