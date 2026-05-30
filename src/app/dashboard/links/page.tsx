@@ -31,6 +31,7 @@ interface Link {
   title: string
   url: string
   icon: string | null
+  imageUrl: string | null
   isActive: boolean
   order: number
   clicks: number
@@ -100,6 +101,13 @@ function SortableLinkCard({
         >
           <GripVertical className="w-4 h-4 text-muted-foreground" />
         </button>
+        {link.imageUrl && (
+          <img
+            src={link.imageUrl}
+            alt=""
+            className="w-10 h-10 rounded object-cover shrink-0"
+          />
+        )}
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{link.title}</p>
           <p className="text-xs text-muted-foreground truncate">{link.url}</p>
@@ -126,6 +134,15 @@ function SortableLinkCard({
       {isExpanded && isPro && (
         <div className="px-3 pb-3 pt-0 border-t border-gray-100">
           <div className="pt-3 space-y-3">
+            <div>
+              <p className="text-xs font-medium text-gray-500 mb-1.5">Image URL</p>
+              <Input
+                placeholder="https://example.com/image.jpg"
+                value={link.imageUrl || ""}
+                onChange={(e) => onUpdateLink(link.id, { imageUrl: e.target.value || null })}
+                className="h-7 text-xs"
+              />
+            </div>
             <div>
               <p className="text-xs font-medium text-gray-500 mb-1.5 flex items-center gap-1"><Clock className="w-3 h-3" /> Schedule</p>
               <div className="grid grid-cols-2 gap-2">
@@ -192,6 +209,7 @@ export default function LinksPage() {
   const [loading, setLoading] = useState(true)
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
   const [error, setError] = useState("")
   const [adding, setAdding] = useState(false)
   const [expandedId, setExpandedId] = useState<string | null>(null)
@@ -221,7 +239,7 @@ export default function LinksPage() {
     const res = await fetch("/api/links", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, url }),
+      body: JSON.stringify({ title, url, imageUrl: imageUrl || undefined }),
     })
     if (!res.ok) {
       const data = await res.json()
@@ -231,6 +249,7 @@ export default function LinksPage() {
     }
     setTitle("")
     setUrl("")
+    setImageUrl("")
     setAdding(false)
     fetchLinks()
   }
@@ -301,6 +320,7 @@ export default function LinksPage() {
             <div className="flex-1 space-y-2">
               <Input placeholder="Link title (e.g. My Twitter)" value={title} onChange={(e) => setTitle(e.target.value)} />
               <Input placeholder="URL (e.g. https://twitter.com/you)" value={url} onChange={(e) => setUrl(e.target.value)} />
+              <Input placeholder="Image URL (optional)" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
             </div>
             <Button onClick={addLink} disabled={adding || !title || !url || (maxLinks !== -1 && links.length >= maxLinks)}>
               <Plus className="w-4 h-4 mr-1" /> Add Link

@@ -41,6 +41,9 @@ export default async function UserProfilePage({ params }: { params: { username: 
         where: { isActive: true },
         orderBy: { order: "asc" },
       },
+      socialLinks: {
+        orderBy: { order: "asc" },
+      },
     },
   })
 
@@ -73,11 +76,17 @@ export default async function UserProfilePage({ params }: { params: { username: 
       buttonTextColor={user.buttonTextColor}
       backgroundColor={user.backgroundColor}
       avatarShape={user.avatarShape}
+      socialLinks={user.socialLinks.map((sl) => ({
+        platform: sl.platform,
+        handle: sl.handle,
+        url: sl.url,
+      }))}
       links={activeLinks.map((l) => ({
         id: l.id,
         title: l.title,
         url: l.url,
         icon: l.icon || undefined,
+        imageUrl: l.imageUrl,
         utmSource: l.utmSource,
         utmMedium: l.utmMedium,
         utmCampaign: l.utmCampaign,

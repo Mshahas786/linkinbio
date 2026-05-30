@@ -14,11 +14,13 @@ import {
   CreditCard,
   LogOut,
   ExternalLink,
+  Share2,
 } from "lucide-react"
 
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/links", label: "Links", icon: LinkIcon },
+  { href: "/dashboard/social", label: "Social", icon: Share2 },
   { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },

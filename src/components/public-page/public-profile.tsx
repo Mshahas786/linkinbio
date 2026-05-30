@@ -2,16 +2,24 @@
 
 import { useEffect } from "react"
 import { themes, buttonStyles, avatarShapes } from "@/lib/themes"
+import { getSocialPlatform } from "@/lib/social"
 
 interface LinkData {
   id: string
   title: string
   url: string
   icon?: string
+  imageUrl?: string | null
   utmSource?: string | null
   utmMedium?: string | null
   utmCampaign?: string | null
   utmContent?: string | null
+}
+
+interface SocialLinkData {
+  platform: string
+  handle: string
+  url: string
 }
 
 interface PublicProfileProps {
@@ -27,6 +35,7 @@ interface PublicProfileProps {
   backgroundColor?: string | null
   avatarShape?: string
   links: LinkData[]
+  socialLinks?: SocialLinkData[]
   isPro: boolean
 }
 
@@ -55,6 +64,7 @@ export function PublicProfile({
   backgroundColor: customBg,
   avatarShape: avatarShapeId = "circle",
   links,
+  socialLinks,
 }: PublicProfileProps) {
   const activeTheme = themes.find((t) => t.id === themeId) || themes[0]
   const activeButtonStyle = buttonStyles.find((b) => b.id === buttonStyleId) || buttonStyles[0]
@@ -84,7 +94,31 @@ export function PublicProfile({
           />
         )}
         <h1 className={`text-2xl font-bold mb-1 ${activeTheme.textClass}`}>{name}</h1>
-        {bio && <p className={`text-gray-600 mb-6 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
+        {bio && <p className={`text-gray-600 mb-4 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
+        {socialLinks && socialLinks.length > 0 && (
+          <div className={`flex items-center gap-3 mb-6 ${bioAlignment === "left" ? "justify-start" : "justify-center"}`}>
+            {socialLinks.map((sl) => {
+              const platform = getSocialPlatform(sl.platform)
+              if (!platform) return null
+              return (
+                <a
+                  key={sl.platform}
+                  href={sl.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
+                  style={{ backgroundColor: platform.color }}
+                  title={`${platform.name}: ${sl.handle}`}
+                >
+                  <span
+                    className="w-5 h-5 text-white"
+                    dangerouslySetInnerHTML={{ __html: platform.icon.replace('fill="currentColor"', 'fill="white"') }}
+                  />
+                </a>
+              )
+            })}
+          </div>
+        )}
         <div className="space-y-3">
           {links.map((link) => (
             <a
@@ -96,7 +130,11 @@ export function PublicProfile({
               className={`block w-full py-3 px-6 text-center font-medium transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm ${activeButtonStyle.className}`}
               style={{ backgroundColor: accentColor, color: buttonTextColor || "#fff" }}
             >
-              {link.icon && <span className="mr-2">{link.icon}</span>}
+              {link.imageUrl ? (
+                <img src={link.imageUrl} alt="" className="w-5 h-5 inline-block mr-2 rounded object-cover" />
+              ) : link.icon ? (
+                <span className="mr-2">{link.icon}</span>
+              ) : null}
               {link.title}
             </a>
           ))}

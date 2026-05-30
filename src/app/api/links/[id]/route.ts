@@ -17,7 +17,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const data = await req.json()
   const updateData: Record<string, any> = {}
 
-  const directFields = ["title", "url", "icon", "isActive", "order", "utmSource", "utmMedium", "utmCampaign", "utmContent"]
+  const directFields = ["title", "url", "icon", "imageUrl", "isActive", "order", "utmSource", "utmMedium", "utmCampaign", "utmContent"]
   for (const key of directFields) {
     if (data[key] !== undefined) updateData[key] = data[key]
   }
