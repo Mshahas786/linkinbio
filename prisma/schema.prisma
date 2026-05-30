@@ -36,6 +36,15 @@ model User {
   showAvatar      Boolean  @default(true)
   showBio         Boolean  @default(true)
   headerImageUrl  String?
+  customCss       String?
+  isLocked        Boolean  @default(false)
+  pagePassword    String?
+  buttonBorderColor String?
+  buttonFontWeight String  @default("medium")
+  countdownTitle  String?
+  countdownDate   DateTime?
+  enableEmailCapture Boolean @default(false)
+  emailCaptureTitle String?
   customDomain    String?  @unique
   domainVerified Boolean @default(false)
   referralCode  String?  @unique
@@ -51,6 +60,7 @@ model User {
   links        Link[]
   socialLinks  SocialLink[]
   subscription Subscription?
+  subscribers   Subscriber[]
 }
 
 model Account {
@@ -95,6 +105,7 @@ model Link {
   url         String
   icon        String?
   imageUrl    String?
+  section     String?
   isActive    Boolean   @default(true)
   order       Int       @default(0)
   clicks      Int       @default(0)
@@ -148,4 +159,15 @@ model Subscription {
   updatedAt     DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, email])
 }

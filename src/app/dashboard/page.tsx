@@ -3,16 +3,18 @@ import { authOptions } from "@/lib/auth"
 import prisma from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BarChart3, Link as LinkIcon, MousePointerClick, Crown } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { BarChart3, Link as LinkIcon, MousePointerClick, Crown, QrCode } from "lucide-react"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
   const userId = session?.user?.id!
 
-  const [linkCount, totalClicks, subscription] = await Promise.all([
+  const [linkCount, totalClicks, subscription, user] = await Promise.all([
     prisma.link.count({ where: { userId } }),
     prisma.link.aggregate({ where: { userId }, _sum: { clicks: true } }),
     prisma.subscription.findUnique({ where: { userId } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { username: true } }),
   ])
 
   const isPro = subscription?.status === "active"
@@ -96,6 +98,38 @@ export default async function DashboardPage() {
               ))}
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <QrCode className="w-5 h-5 text-primary" />
+            Profile QR Code
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col sm:flex-row items-start gap-6">
+          <img
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_VERCEL_URL || "https://flolio.vercel.app"}/${user?.username || ""}`)}`}
+            alt="Profile QR Code"
+            className="w-32 h-32 rounded-xl border"
+          />
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              Scan or download this QR code to share your Flolio page instantly.
+            </p>
+            <a
+              href={`https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_VERCEL_URL || "https://flolio.vercel.app"}/${user?.username || ""}`)}`}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" size="sm">
+                <QrCode className="w-4 h-4 mr-2" />
+                Download QR Code
+              </Button>
+            </a>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Trash2, GripVertical, ExternalLink, Pause, Play, Clock, Tag, ChevronDown, ChevronUp } from "lucide-react"
+import { Plus, Trash2, GripVertical, ExternalLink, Pause, Play, Clock, Tag, ChevronDown, ChevronUp, Smile, Wand2 } from "lucide-react"
 import { PRICE_TIERS } from "@/lib/pricing"
+import { emojis } from "@/lib/customization"
 import {
   DndContext,
   closestCenter,
@@ -41,6 +42,49 @@ interface Link {
   utmMedium: string | null
   utmCampaign: string | null
   utmContent: string | null
+  section: string | null
+}
+
+function EmojiPicker({ value, onChange }: { value: string | null; onChange: (emoji: string | null) => void }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-8 h-8 rounded-lg border border-input bg-background flex items-center justify-center text-sm hover:bg-accent shrink-0"
+      >
+        {value || <Smile className="w-3.5 h-3.5 text-muted-foreground" />}
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute top-full left-0 mt-1 z-20 w-52 p-2 bg-card border rounded-xl shadow-xl grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
+            {emojis.map((e) => (
+              <button
+                key={e}
+                type="button"
+                onClick={() => { onChange(e === value ? null : e); setOpen(false) }}
+                className={`w-6 h-6 flex items-center justify-center rounded hover:bg-accent text-sm ${value === e ? "bg-primary/10 ring-1 ring-primary" : ""}`}
+              >
+                {e}
+              </button>
+            ))}
+            {value && (
+              <button
+                type="button"
+                onClick={() => { onChange(null); setOpen(false) }}
+                className="col-span-8 text-xs text-muted-foreground hover:text-foreground py-1"
+              >
+                Remove icon
+              </button>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  )
 }
 
 function SortableLinkCard({
@@ -101,16 +145,13 @@ function SortableLinkCard({
         >
           <GripVertical className="w-4 h-4 text-muted-foreground" />
         </button>
-        {link.imageUrl && (
-          <img
-            src={link.imageUrl}
-            alt=""
-            className="w-10 h-10 rounded object-cover shrink-0 mt-0.5"
-          />
-        )}
+        <EmojiPicker value={link.icon} onChange={(icon) => onUpdateLink(link.id, { icon })} />
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{link.title}</p>
           <p className="text-xs text-muted-foreground truncate">{link.url}</p>
+          {link.section && (
+            <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded mt-0.5 inline-block">{link.section}</span>
+          )}
         </div>
         <div className="flex items-start gap-1 shrink-0">
           <span className="hidden sm:inline text-xs text-muted-foreground mt-1.5">{link.clicks} clicks</span>
@@ -140,6 +181,15 @@ function SortableLinkCard({
                 placeholder="https://example.com/image.jpg"
                 value={link.imageUrl || ""}
                 onChange={(e) => onUpdateLink(link.id, { imageUrl: e.target.value || null })}
+                className="h-7 text-xs"
+              />
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 mb-1.5 flex items-center gap-1"><Tag className="w-3 h-3" /> Section / Group</p>
+              <Input
+                placeholder="e.g. My Shop, Latest Video"
+                value={link.section || ""}
+                onChange={(e) => onUpdateLink(link.id, { section: e.target.value || null })}
                 className="h-7 text-xs"
               />
             </div>
@@ -210,6 +260,7 @@ export default function LinksPage() {
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [imageUrl, setImageUrl] = useState("")
+  const [fetching, setFetching] = useState(false)
   const [error, setError] = useState("")
   const [adding, setAdding] = useState(false)
   const [expandedId, setExpandedId] = useState<string | null>(null)
@@ -319,7 +370,29 @@ export default function LinksPage() {
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-start">
             <div className="flex-1 space-y-2">
               <Input placeholder="Link title (e.g. My Twitter)" value={title} onChange={(e) => setTitle(e.target.value)} />
-              <Input placeholder="URL (e.g. https://twitter.com/you)" value={url} onChange={(e) => setUrl(e.target.value)} />
+              <div className="flex gap-2">
+                <Input placeholder="URL (e.g. https://twitter.com/you)" value={url} onChange={(e) => setUrl(e.target.value)} className="flex-1" />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  disabled={!url || fetching}
+                  onClick={async () => {
+                    setFetching(true)
+                    try {
+                      const res = await fetch(`/api/og?url=${encodeURIComponent(url)}`)
+                      const data = await res.json()
+                      if (data.title) setTitle(data.title)
+                      if (data.image) setImageUrl(data.image)
+                    } catch {}
+                    setFetching(false)
+                  }}
+                  className="shrink-0"
+                  title="Auto-fetch link metadata"
+                >
+                  <Wand2 className={`w-4 h-4 ${fetching ? "animate-spin" : ""}`} />
+                </Button>
+              </div>
               <Input placeholder="Image URL (optional)" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
             </div>
             <Button onClick={addLink} disabled={adding || !title || !url || (maxLinks !== -1 && links.length >= maxLinks)} className="shrink-0">

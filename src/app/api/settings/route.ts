@@ -36,6 +36,15 @@ export async function GET() {
       showAvatar: true,
       showBio: true,
       headerImageUrl: true,
+      customCss: true,
+      isLocked: true,
+      pagePassword: true,
+      buttonBorderColor: true,
+      buttonFontWeight: true,
+      countdownTitle: true,
+      countdownDate: true,
+      enableEmailCapture: true,
+      emailCaptureTitle: true,
       customDomain: true,
       domainVerified: true,
     },
@@ -51,13 +60,16 @@ export async function PATCH(req: Request) {
   }
 
   const data = await req.json()
-  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape", "fontFamily", "fontSize", "linkBorderWidth", "linkShadow", "linkSpacing", "layoutMode", "hoverEffect", "showAvatar", "showBio", "headerImageUrl"]
+  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape", "fontFamily", "fontSize", "linkBorderWidth", "linkShadow", "linkSpacing", "layoutMode", "hoverEffect", "showAvatar", "showBio", "headerImageUrl", "customCss", "isLocked", "pagePassword", "buttonBorderColor", "buttonFontWeight", "countdownTitle", "enableEmailCapture", "emailCaptureTitle"]
 
   const updateData: Record<string, any> = {}
   for (const key of allowed) {
     if (data[key] !== undefined) {
       updateData[key] = data[key]
     }
+  }
+  if (data.countdownDate !== undefined) {
+    updateData.countdownDate = data.countdownDate ? new Date(data.countdownDate) : null
   }
 
   const user = await prisma.user.update({

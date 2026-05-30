@@ -86,6 +86,15 @@ export default async function UserProfilePage({ params }: { params: { username: 
       showAvatar={user.showAvatar}
       showBio={user.showBio}
       headerImageUrl={user.headerImageUrl || undefined}
+      customCss={user.customCss || undefined}
+      isLocked={user.isLocked}
+      pagePassword={user.pagePassword || undefined}
+      buttonBorderColor={user.buttonBorderColor || undefined}
+      buttonFontWeight={user.buttonFontWeight}
+      countdownTitle={user.countdownTitle || undefined}
+      countdownDate={user.countdownDate?.toISOString() || undefined}
+      enableEmailCapture={user.enableEmailCapture}
+      emailCaptureTitle={user.emailCaptureTitle || undefined}
       socialLinks={user.socialLinks.map((sl) => ({
         platform: sl.platform,
         handle: sl.handle,
@@ -97,6 +106,7 @@ export default async function UserProfilePage({ params }: { params: { username: 
         url: l.url,
         icon: l.icon || undefined,
         imageUrl: l.imageUrl,
+        section: l.section || undefined,
         utmSource: l.utmSource,
         utmMedium: l.utmMedium,
         utmCampaign: l.utmCampaign,

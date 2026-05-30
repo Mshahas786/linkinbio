@@ -5,9 +5,9 @@ import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, LayoutGrid, Image, Eye, EyeOff, Box } from "lucide-react"
+import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, LayoutGrid, Image, Eye, EyeOff, Box, Mail, Code, Clock } from "lucide-react"
 import { themes, proThemes, buttonStyles, avatarShapes, alignmentOptions } from "@/lib/themes"
-import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions, layoutModes, hoverEffects } from "@/lib/customization"
+import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions, layoutModes, hoverEffects, fontWeightOptions } from "@/lib/customization"
 
 const presetColors = [
   "#c04a2b", "#d46845", "#e8926e", "#ef4444",
@@ -36,6 +36,15 @@ export default function AppearancePage() {
   const [showAvatar, setShowAvatar] = useState(true)
   const [showBio, setShowBio] = useState(true)
   const [headerImageUrl, setHeaderImageUrl] = useState("")
+  const [customCss, setCustomCss] = useState("")
+  const [isLocked, setIsLocked] = useState(false)
+  const [pagePassword, setPagePassword] = useState("")
+  const [buttonBorderColor, setButtonBorderColor] = useState("")
+  const [buttonFontWeight, setButtonFontWeight] = useState("medium")
+  const [countdownTitle, setCountdownTitle] = useState("")
+  const [countdownDate, setCountdownDate] = useState("")
+  const [enableEmailCapture, setEnableEmailCapture] = useState(false)
+  const [emailCaptureTitle, setEmailCaptureTitle] = useState("")
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState("")
@@ -67,6 +76,15 @@ export default function AppearancePage() {
         setShowAvatar(data.showAvatar ?? true)
         setShowBio(data.showBio ?? true)
         setHeaderImageUrl(data.headerImageUrl || "")
+        setCustomCss(data.customCss || "")
+        setIsLocked(data.isLocked ?? false)
+        setPagePassword(data.pagePassword || "")
+        setButtonBorderColor(data.buttonBorderColor || "")
+        setButtonFontWeight(data.buttonFontWeight || "medium")
+        setCountdownTitle(data.countdownTitle || "")
+        setCountdownDate(data.countdownDate ? new Date(data.countdownDate).toISOString().slice(0, 16) : "")
+        setEnableEmailCapture(data.enableEmailCapture ?? false)
+        setEmailCaptureTitle(data.emailCaptureTitle || "")
       }
       if (referralRes?.ok) {
         const data = await referralRes.json()
@@ -90,12 +108,16 @@ export default function AppearancePage() {
       buttonStyle, bioAlignment,
       fontFamily, fontSize, linkBorderWidth, linkShadow, linkSpacing,
       layoutMode, hoverEffect, showAvatar, showBio,
+      isLocked, pagePassword, buttonFontWeight, enableEmailCapture, emailCaptureTitle, countdownTitle,
     }
     if (isPro) {
       body.buttonTextColor = buttonTextColor
       body.avatarShape = avatarShape
       body.backgroundColor = backgroundColor || null
       body.headerImageUrl = headerImageUrl || null
+      body.customCss = customCss || null
+      body.buttonBorderColor = buttonBorderColor || null
+      body.countdownDate = countdownDate || null
     }
     const res = await fetch("/api/settings", {
       method: "PATCH",
@@ -558,6 +580,169 @@ export default function AppearancePage() {
                 Recommended size: 1200x600px. Will be cropped to 2:1 ratio.
               </p>
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {isPro && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Box className="w-5 h-5 text-primary" />
+              Button Border Color
+              <ProBadge />
+            </CardTitle>
+            <CardDescription>Override the border color on your link buttons</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg border-2 border-gray-200" style={{ backgroundColor: buttonBorderColor || accentColor }} />
+              <Input value={buttonBorderColor} onChange={(e) => setButtonBorderColor(e.target.value)} placeholder={accentColor} className="w-32" />
+              {buttonBorderColor && (
+                <button onClick={() => setButtonBorderColor("")} className="text-xs text-muted-foreground underline">Clear</button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {["#ffffff", "#e5e7eb", "#9ca3af", "#374151", "#000000", accentColor].map((color) => (
+                <button
+                  key={color}
+                  onClick={() => setButtonBorderColor(color === accentColor ? "" : color)}
+                  className={`w-8 h-8 rounded-full border-2 transition-all ${buttonBorderColor === color || (!buttonBorderColor && color === accentColor) ? "border-gray-900 scale-110" : "border-gray-200"}`}
+                  style={{ backgroundColor: color }}
+                />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Type className="w-5 h-5 text-primary" />
+            Button Font Weight
+          </CardTitle>
+          <CardDescription>Control how bold your link button text appears</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+            {fontWeightOptions.map((fw) => (
+              <button
+                key={fw.id}
+                onClick={() => setButtonFontWeight(fw.id)}
+                className={`flex items-center justify-center py-4 px-3 text-sm border-2 rounded-xl transition-all ${fw.className} ${
+                  buttonFontWeight === fw.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                {fw.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Lock className="w-5 h-5 text-primary" />
+            Password Protection
+          </CardTitle>
+          <CardDescription>Lock your page behind a password</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isLocked}
+              onChange={(e) => setIsLocked(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-primary"
+            />
+            <span className="text-sm">Lock my page with a password</span>
+          </label>
+          {isLocked && (
+            <Input
+              value={pagePassword}
+              onChange={(e) => setPagePassword(e.target.value)}
+              placeholder="Enter a password"
+              type="password"
+            />
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Mail className="w-5 h-5 text-primary" />
+            Email Capture
+          </CardTitle>
+          <CardDescription>Collect email addresses from your visitors</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={enableEmailCapture}
+              onChange={(e) => setEnableEmailCapture(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-primary"
+            />
+            <span className="text-sm">Show email signup form on my page</span>
+          </label>
+          {enableEmailCapture && (
+            <Input
+              value={emailCaptureTitle}
+              onChange={(e) => setEmailCaptureTitle(e.target.value)}
+              placeholder="e.g. Join my newsletter"
+            />
+          )}
+        </CardContent>
+      </Card>
+
+      {isPro && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Clock className="w-5 h-5 text-primary" />
+              Countdown Timer
+              <ProBadge />
+            </CardTitle>
+            <CardDescription>Show a countdown on your page for launches or events</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Input
+              value={countdownTitle}
+              onChange={(e) => setCountdownTitle(e.target.value)}
+              placeholder="e.g. Launching in"
+            />
+            <Input
+              type="datetime-local"
+              value={countdownDate}
+              onChange={(e) => setCountdownDate(e.target.value)}
+            />
+          </CardContent>
+        </Card>
+      )}
+
+      {isPro && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Code className="w-5 h-5 text-primary" />
+              Custom CSS
+              <ProBadge />
+            </CardTitle>
+            <CardDescription>Inject custom CSS to style your page (advanced)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <textarea
+              value={customCss}
+              onChange={(e) => setCustomCss(e.target.value)}
+              placeholder="/* Add your custom CSS here */
+.my-link { background: red !important; }"
+              className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
           </CardContent>
         </Card>
       )}

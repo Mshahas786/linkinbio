@@ -46,3 +46,22 @@ export const hoverEffects = [
   { id: "scale", name: "Scale", className: "hover:scale-105" },
   { id: "slide", name: "Slide", className: "hover:translate-x-1" },
 ] as const
+
+export const fontWeightOptions = [
+  { id: "light", name: "Light", className: "font-light", weight: 300 },
+  { id: "normal", name: "Normal", className: "font-normal", weight: 400 },
+  { id: "medium", name: "Medium", className: "font-medium", weight: 500 },
+  { id: "semibold", name: "Semibold", className: "font-semibold", weight: 600 },
+  { id: "bold", name: "Bold", className: "font-bold", weight: 700 },
+] as const
+
+export const emojis = [
+  "🔥", "💫", "⭐", "✨", "🎯", "💎", "🚀", "💡", "🎨", "📸",
+  "🎵", "🎬", "📺", "🎮", "⚽", "🏀", "🎧", "📚", "✍️", "💪",
+  "🤝", "💬", "📢", "🛒", "💰", "🎁", "🏆", "🌟", "🔗", "📱",
+  "💻", "🖥️", "⌚", "📷", "🎥", "🎙️", "📡", "🔔", "📌", "📍",
+  "❤️", "💙", "💚", "💛", "💜", "🧡", "🖤", "🤍", "💝", "💖",
+  "🌈", "☀️", "🌙", "🌟", "🌊", "🔥", "🌸", "🍀", "🌺", "🎭",
+  "🍕", "🍔", "☕", "🍻", "🎂", "🍿", "🏖️", "✈️", "🚗", "🏠",
+  "👋", "👍", "👏", "🙌", "💅", "🫶", "👀", "🧠", "👑", "💄",
+] as const
