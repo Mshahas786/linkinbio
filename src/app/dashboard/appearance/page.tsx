@@ -5,9 +5,9 @@ import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, Shadow, LayoutGrid } from "lucide-react"
+import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, LayoutGrid, Image, Eye, EyeOff, Box } from "lucide-react"
 import { themes, proThemes, buttonStyles, avatarShapes, alignmentOptions } from "@/lib/themes"
-import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions } from "@/lib/customization"
+import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions, layoutModes, hoverEffects } from "@/lib/customization"
 
 const presetColors = [
   "#c04a2b", "#d46845", "#e8926e", "#ef4444",
@@ -31,6 +31,11 @@ export default function AppearancePage() {
   const [linkBorderWidth, setLinkBorderWidth] = useState("none")
   const [linkShadow, setLinkShadow] = useState("none")
   const [linkSpacing, setLinkSpacing] = useState("normal")
+  const [layoutMode, setLayoutMode] = useState("list")
+  const [hoverEffect, setHoverEffect] = useState("lift")
+  const [showAvatar, setShowAvatar] = useState(true)
+  const [showBio, setShowBio] = useState(true)
+  const [headerImageUrl, setHeaderImageUrl] = useState("")
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState("")
@@ -57,6 +62,11 @@ export default function AppearancePage() {
         setLinkBorderWidth(data.linkBorderWidth || "none")
         setLinkShadow(data.linkShadow || "none")
         setLinkSpacing(data.linkSpacing || "normal")
+        setLayoutMode(data.layoutMode || "list")
+        setHoverEffect(data.hoverEffect || "lift")
+        setShowAvatar(data.showAvatar ?? true)
+        setShowBio(data.showBio ?? true)
+        setHeaderImageUrl(data.headerImageUrl || "")
       }
       if (referralRes?.ok) {
         const data = await referralRes.json()
@@ -79,11 +89,13 @@ export default function AppearancePage() {
       accentColor, theme, showBranding,
       buttonStyle, bioAlignment,
       fontFamily, fontSize, linkBorderWidth, linkShadow, linkSpacing,
+      layoutMode, hoverEffect, showAvatar, showBio,
     }
     if (isPro) {
       body.buttonTextColor = buttonTextColor
       body.avatarShape = avatarShape
       body.backgroundColor = backgroundColor || null
+      body.headerImageUrl = headerImageUrl || null
     }
     const res = await fetch("/api/settings", {
       method: "PATCH",
@@ -368,7 +380,7 @@ export default function AppearancePage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Shadow className="w-5 h-5 text-primary" />
+            <Box className="w-5 h-5 text-primary" />
             Link Shadow
           </CardTitle>
           <CardDescription>Add a shadow effect to your link buttons</CardDescription>
@@ -418,6 +430,137 @@ export default function AppearancePage() {
           </div>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <LayoutGrid className="w-5 h-5 text-primary" />
+            Layout Mode
+          </CardTitle>
+          <CardDescription>Choose how your links are arranged on the page</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-3">
+            {layoutModes.map((m) => (
+              <button
+                key={m.id}
+                onClick={() => setLayoutMode(m.id)}
+                className={`flex flex-col items-center justify-center gap-2 py-6 px-4 text-sm font-medium border-2 rounded-xl transition-all ${
+                  layoutMode === m.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                {m.id === "list" ? (
+                  <div className="flex flex-col gap-1.5 w-12">
+                    <div className="h-2 bg-current rounded opacity-40" />
+                    <div className="h-2 bg-current rounded opacity-40" />
+                    <div className="h-2 bg-current rounded opacity-40" />
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-1.5 w-12">
+                    <div className="h-2 bg-current rounded opacity-40" />
+                    <div className="h-2 bg-current rounded opacity-40" />
+                    <div className="h-2 bg-current rounded opacity-40" />
+                    <div className="h-2 bg-current rounded opacity-40" />
+                  </div>
+                )}
+                {m.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-primary" />
+            Hover Effect
+          </CardTitle>
+          <CardDescription>Animation when someone hovers over your link buttons</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            {hoverEffects.map((h) => (
+              <button
+                key={h.id}
+                onClick={() => setHoverEffect(h.id)}
+                className={`flex items-center justify-center py-4 px-3 text-sm font-medium border-2 rounded-xl transition-all ${
+                  hoverEffect === h.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                {h.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Eye className="w-5 h-5 text-primary" />
+            Visibility
+          </CardTitle>
+          <CardDescription>Toggle which elements appear on your public page</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showAvatar}
+              onChange={(e) => setShowAvatar(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-primary"
+            />
+            <span className="text-sm">Show profile picture</span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showBio}
+              onChange={(e) => setShowBio(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-primary"
+            />
+            <span className="text-sm">Show bio text</span>
+          </label>
+        </CardContent>
+      </Card>
+
+      {isPro && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Image className="w-5 h-5 text-primary" />
+              Header Image
+              <ProBadge />
+            </CardTitle>
+            <CardDescription>Add a banner image at the top of your page</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                value={headerImageUrl}
+                onChange={(e) => setHeaderImageUrl(e.target.value)}
+                placeholder="https://example.com/banner.jpg"
+              />
+              {headerImageUrl && (
+                <img
+                  src={headerImageUrl}
+                  alt="Header preview"
+                  className="w-full h-32 object-cover rounded-xl border"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                />
+              )}
+              <p className="text-xs text-muted-foreground">
+                Recommended size: 1200x600px. Will be cropped to 2:1 ratio.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {isPro && (
         <Card>

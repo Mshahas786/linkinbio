@@ -34,9 +34,15 @@ export const spacingOptions = [
   { id: "spacious", name: "Spacious", className: "gap-6" },
 ] as const
 
-export const borderColorOptions = [
-  { id: "white", name: "White", color: "#ffffff" },
-  { id: "light", name: "Light", color: "#e5e7eb" },
-  { id: "dark", name: "Dark", color: "#374151" },
-  { id: "accent", name: "Accent", color: "accent" },
+export const layoutModes = [
+  { id: "list", name: "List", className: "flex flex-col", icon: "list" },
+  { id: "grid", name: "Grid", className: "grid grid-cols-2", icon: "grid" },
+] as const
+
+export const hoverEffects = [
+  { id: "none", name: "None", className: "" },
+  { id: "lift", name: "Lift", className: "hover:-translate-y-1 hover:shadow-lg" },
+  { id: "glow", name: "Glow", className: "hover:scale-[1.02]" },
+  { id: "scale", name: "Scale", className: "hover:scale-105" },
+  { id: "slide", name: "Slide", className: "hover:translate-x-1" },
 ] as const

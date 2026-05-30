@@ -81,6 +81,11 @@ export default async function UserProfilePage({ params }: { params: { username: 
       linkBorderWidth={user.linkBorderWidth}
       linkShadow={user.linkShadow}
       linkSpacing={user.linkSpacing}
+      layoutMode={user.layoutMode}
+      hoverEffect={user.hoverEffect}
+      showAvatar={user.showAvatar}
+      showBio={user.showBio}
+      headerImageUrl={user.headerImageUrl || undefined}
       socialLinks={user.socialLinks.map((sl) => ({
         platform: sl.platform,
         handle: sl.handle,

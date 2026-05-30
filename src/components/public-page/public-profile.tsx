@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { themes, buttonStyles, avatarShapes } from "@/lib/themes"
-import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions } from "@/lib/customization"
+import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions, layoutModes, hoverEffects } from "@/lib/customization"
 import { getSocialPlatform } from "@/lib/social"
 
 interface LinkData {
@@ -40,6 +40,11 @@ interface PublicProfileProps {
   linkBorderWidth?: string
   linkShadow?: string
   linkSpacing?: string
+  layoutMode?: string
+  hoverEffect?: string
+  showAvatar?: boolean
+  showBio?: boolean
+  headerImageUrl?: string
   links: LinkData[]
   socialLinks?: SocialLinkData[]
   isPro: boolean
@@ -74,6 +79,11 @@ export function PublicProfile({
   linkBorderWidth: borderId = "none",
   linkShadow: shadowId = "none",
   linkSpacing: spacingId = "normal",
+  layoutMode: layoutId = "list",
+  hoverEffect: hoverId = "lift",
+  showAvatar = true,
+  showBio = true,
+  headerImageUrl,
   links,
   socialLinks,
 }: PublicProfileProps) {
@@ -85,6 +95,9 @@ export function PublicProfile({
   const activeBorderWidth = borderWidthOptions.find((b) => b.id === borderId) || borderWidthOptions[0]
   const activeShadow = shadowOptions.find((s) => s.id === shadowId) || shadowOptions[0]
   const activeSpacing = spacingOptions.find((s) => s.id === spacingId) || spacingOptions[0]
+  const activeLayout = layoutModes.find((l) => l.id === layoutId) || layoutModes[0]
+  const activeHover = hoverEffects.find((h) => h.id === hoverId) || hoverEffects[0]
+  const isGrid = layoutId === "grid"
   const bgGradient = customBg ? "" : `bg-gradient-to-b ${activeTheme.background}`
   const bgStyle = customBg ? { backgroundColor: customBg } : {}
 
@@ -101,7 +114,14 @@ export function PublicProfile({
   return (
     <div className={`min-h-screen ${bgGradient} py-12 px-4`} style={bgStyle}>
       <div className={`max-w-md mx-auto ${bioAlignment === "left" ? "text-left" : "text-center"}`}>
-        {avatarUrl && (
+        {headerImageUrl && (
+          <img
+            src={headerImageUrl}
+            alt=""
+            className="w-full h-40 object-cover rounded-2xl mb-6 shadow-md"
+          />
+        )}
+        {showAvatar && avatarUrl && (
           <img
             src={avatarUrl}
             alt={name}
@@ -110,7 +130,7 @@ export function PublicProfile({
           />
         )}
         <h1 className={`font-heading text-2xl font-bold mb-1 ${activeTheme.textClass}`}>{name}</h1>
-        {bio && <p className={`text-gray-600 mb-4 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
+        {showBio && bio && <p className={`text-gray-600 mb-4 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
         {socialLinks && socialLinks.length > 0 && (
           <div className={`flex items-center gap-3 mb-6 flex-wrap ${bioAlignment === "left" ? "justify-start" : "justify-center"}`}>
             {socialLinks.map((sl) => {
@@ -135,7 +155,7 @@ export function PublicProfile({
             })}
           </div>
         )}
-        <div className={`flex flex-col ${activeSpacing.className}`}>
+        <div className={`${isGrid ? "grid grid-cols-2" : "flex flex-col"} ${isGrid ? "gap-2" : activeSpacing.className}`}>
           {links.map((link) => (
             <a
               key={link.id}
@@ -143,7 +163,7 @@ export function PublicProfile({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackClick(link.id)}
-              className={`block w-full py-3 px-6 text-center font-medium transition-all hover:scale-[1.02] active:scale-[0.98] ${activeBorderWidth.className} ${activeShadow.className} ${activeFontSize.className} ${activeButtonStyle.className}`}
+              className={`block w-full py-3 px-4 text-center font-medium transition-all duration-200 active:scale-[0.98] ${activeBorderWidth.className} ${activeShadow.className} ${activeFontSize.className} ${activeButtonStyle.className} ${activeHover.className}`}
               style={{
                 backgroundColor: accentColor,
                 color: buttonTextColor || "#fff",

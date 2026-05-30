@@ -31,6 +31,11 @@ export async function GET() {
       linkBorderWidth: true,
       linkShadow: true,
       linkSpacing: true,
+      layoutMode: true,
+      hoverEffect: true,
+      showAvatar: true,
+      showBio: true,
+      headerImageUrl: true,
       customDomain: true,
       domainVerified: true,
     },
@@ -46,7 +51,7 @@ export async function PATCH(req: Request) {
   }
 
   const data = await req.json()
-  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape", "fontFamily", "fontSize", "linkBorderWidth", "linkShadow", "linkSpacing"]
+  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape", "fontFamily", "fontSize", "linkBorderWidth", "linkShadow", "linkSpacing", "layoutMode", "hoverEffect", "showAvatar", "showBio", "headerImageUrl"]
 
   const updateData: Record<string, any> = {}
   for (const key of allowed) {
