@@ -26,6 +26,11 @@ model User {
   buttonTextColor String?
   backgroundColor String?
   avatarShape     String   @default("circle")
+  fontFamily      String   @default("modern")
+  fontSize        String   @default("md")
+  linkBorderWidth String   @default("none")
+  linkShadow      String   @default("none")
+  linkSpacing     String   @default("normal")
   customDomain    String?  @unique
   domainVerified Boolean @default(false)
   referralCode  String?  @unique

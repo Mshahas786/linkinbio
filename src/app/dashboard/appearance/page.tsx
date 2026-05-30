@@ -5,8 +5,9 @@ import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Crown, Lock, Check, Sparkles } from "lucide-react"
+import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, Shadow, LayoutGrid } from "lucide-react"
 import { themes, proThemes, buttonStyles, avatarShapes, alignmentOptions } from "@/lib/themes"
+import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions } from "@/lib/customization"
 
 const presetColors = [
   "#c04a2b", "#d46845", "#e8926e", "#ef4444",
@@ -25,6 +26,11 @@ export default function AppearancePage() {
   const [buttonTextColor, setButtonTextColor] = useState("#ffffff")
   const [backgroundColor, setBackgroundColor] = useState("")
   const [avatarShape, setAvatarShape] = useState("circle")
+  const [fontFamily, setFontFamily] = useState("modern")
+  const [fontSize, setFontSize] = useState("md")
+  const [linkBorderWidth, setLinkBorderWidth] = useState("none")
+  const [linkShadow, setLinkShadow] = useState("none")
+  const [linkSpacing, setLinkSpacing] = useState("normal")
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState("")
@@ -46,6 +52,11 @@ export default function AppearancePage() {
         setButtonTextColor(data.buttonTextColor || "#ffffff")
         setBackgroundColor(data.backgroundColor || "")
         setAvatarShape(data.avatarShape || "circle")
+        setFontFamily(data.fontFamily || "modern")
+        setFontSize(data.fontSize || "md")
+        setLinkBorderWidth(data.linkBorderWidth || "none")
+        setLinkShadow(data.linkShadow || "none")
+        setLinkSpacing(data.linkSpacing || "normal")
       }
       if (referralRes?.ok) {
         const data = await referralRes.json()
@@ -67,6 +78,7 @@ export default function AppearancePage() {
     const body: Record<string, any> = {
       accentColor, theme, showBranding,
       buttonStyle, bioAlignment,
+      fontFamily, fontSize, linkBorderWidth, linkShadow, linkSpacing,
     }
     if (isPro) {
       body.buttonTextColor = buttonTextColor
@@ -260,6 +272,147 @@ export default function AppearancePage() {
                 }`}
               >
                 {opt.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Type className="w-5 h-5 text-primary" />
+            Font Family
+          </CardTitle>
+          <CardDescription>Choose the font for your link buttons</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {fontFamilies.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFontFamily(f.id)}
+                className={`flex items-center justify-center py-3 px-2 text-sm font-medium border-2 rounded-xl transition-all ${
+                  fontFamily === f.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+                style={{ fontFamily: f.family }}
+              >
+                {f.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <AlignLeft className="w-5 h-5 text-primary" />
+            Font Size
+          </CardTitle>
+          <CardDescription>Adjust the text size on your link buttons</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {fontSizeOptions.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFontSize(f.id)}
+                className={`flex items-center justify-center py-4 px-3 font-medium border-2 rounded-xl transition-all ${
+                  fontSize === f.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                } ${f.className}`}
+              >
+                {f.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Square className="w-5 h-5 text-primary" />
+            Link Border
+          </CardTitle>
+          <CardDescription>Add a border around your link buttons</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {borderWidthOptions.map((b) => (
+              <button
+                key={b.id}
+                onClick={() => setLinkBorderWidth(b.id)}
+                className={`flex items-center justify-center py-4 px-3 text-sm font-medium border-2 rounded-xl transition-all ${
+                  linkBorderWidth === b.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                {b.name}
+              </button>
+            ))}
+          </div>
+          {linkBorderWidth !== "none" && (
+            <p className="text-xs text-muted-foreground mt-3">
+              Border color matches your accent color.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Shadow className="w-5 h-5 text-primary" />
+            Link Shadow
+          </CardTitle>
+          <CardDescription>Add a shadow effect to your link buttons</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {shadowOptions.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setLinkShadow(s.id)}
+                className={`flex items-center justify-center py-4 px-3 text-sm font-medium border-2 rounded-xl transition-all ${
+                  linkShadow === s.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                {s.name}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <LayoutGrid className="w-5 h-5 text-primary" />
+            Link Spacing
+          </CardTitle>
+          <CardDescription>Control the spacing between your links</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {spacingOptions.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setLinkSpacing(s.id)}
+                className={`flex items-center justify-center py-4 px-3 text-sm font-medium border-2 rounded-xl transition-all ${
+                  linkSpacing === s.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                {s.name}
               </button>
             ))}
           </div>

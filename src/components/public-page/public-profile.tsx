@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { themes, buttonStyles, avatarShapes } from "@/lib/themes"
+import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions } from "@/lib/customization"
 import { getSocialPlatform } from "@/lib/social"
 
 interface LinkData {
@@ -34,6 +35,11 @@ interface PublicProfileProps {
   buttonTextColor?: string | null
   backgroundColor?: string | null
   avatarShape?: string
+  fontFamily?: string
+  fontSize?: string
+  linkBorderWidth?: string
+  linkShadow?: string
+  linkSpacing?: string
   links: LinkData[]
   socialLinks?: SocialLinkData[]
   isPro: boolean
@@ -63,12 +69,22 @@ export function PublicProfile({
   buttonTextColor,
   backgroundColor: customBg,
   avatarShape: avatarShapeId = "circle",
+  fontFamily: fontFamilyId = "modern",
+  fontSize: fontSizeId = "md",
+  linkBorderWidth: borderId = "none",
+  linkShadow: shadowId = "none",
+  linkSpacing: spacingId = "normal",
   links,
   socialLinks,
 }: PublicProfileProps) {
   const activeTheme = themes.find((t) => t.id === themeId) || themes[0]
   const activeButtonStyle = buttonStyles.find((b) => b.id === buttonStyleId) || buttonStyles[0]
   const activeAvatarShape = avatarShapes.find((a) => a.id === avatarShapeId) || avatarShapes[0]
+  const activeFontFamily = fontFamilies.find((f) => f.id === fontFamilyId) || fontFamilies[0]
+  const activeFontSize = fontSizeOptions.find((f) => f.id === fontSizeId) || fontSizeOptions[0]
+  const activeBorderWidth = borderWidthOptions.find((b) => b.id === borderId) || borderWidthOptions[0]
+  const activeShadow = shadowOptions.find((s) => s.id === shadowId) || shadowOptions[0]
+  const activeSpacing = spacingOptions.find((s) => s.id === spacingId) || spacingOptions[0]
   const bgGradient = customBg ? "" : `bg-gradient-to-b ${activeTheme.background}`
   const bgStyle = customBg ? { backgroundColor: customBg } : {}
 
@@ -119,7 +135,7 @@ export function PublicProfile({
             })}
           </div>
         )}
-        <div className="space-y-3">
+        <div className={`flex flex-col ${activeSpacing.className}`}>
           {links.map((link) => (
             <a
               key={link.id}
@@ -127,8 +143,13 @@ export function PublicProfile({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackClick(link.id)}
-              className={`block w-full py-3 px-6 text-center font-medium transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm ${activeButtonStyle.className}`}
-              style={{ backgroundColor: accentColor, color: buttonTextColor || "#fff" }}
+              className={`block w-full py-3 px-6 text-center font-medium transition-all hover:scale-[1.02] active:scale-[0.98] ${activeBorderWidth.className} ${activeShadow.className} ${activeFontSize.className} ${activeButtonStyle.className}`}
+              style={{
+                backgroundColor: accentColor,
+                color: buttonTextColor || "#fff",
+                fontFamily: activeFontFamily.family,
+                borderColor: accentColor,
+              }}
             >
               {link.imageUrl ? (
                 <img src={link.imageUrl} alt="" className="w-5 h-5 inline-block mr-2 rounded object-cover" />

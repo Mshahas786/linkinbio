@@ -76,6 +76,11 @@ export default async function UserProfilePage({ params }: { params: { username: 
       buttonTextColor={user.buttonTextColor}
       backgroundColor={user.backgroundColor}
       avatarShape={user.avatarShape}
+      fontFamily={user.fontFamily}
+      fontSize={user.fontSize}
+      linkBorderWidth={user.linkBorderWidth}
+      linkShadow={user.linkShadow}
+      linkSpacing={user.linkSpacing}
       socialLinks={user.socialLinks.map((sl) => ({
         platform: sl.platform,
         handle: sl.handle,
