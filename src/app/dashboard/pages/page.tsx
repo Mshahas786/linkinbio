@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Plus, FileText, Trash2, Link as LinkIcon } from "lucide-react"
+import { Plus, FileText, Trash2 } from "lucide-react"
 import { toast } from "@/components/ui/toast"
 
 type Page = {
@@ -21,6 +21,7 @@ export default function PagesPage() {
   const [pages, setPages] = useState<Page[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [editing, setEditing] = useState<Page | null>(null)
   const [title, setTitle] = useState("")
   const [slug, setSlug] = useState("")
   const [saving, setSaving] = useState(false)
@@ -37,19 +38,30 @@ export default function PagesPage() {
     return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50)
   }
 
-  async function create() {
+  function startEdit(p: Page) {
+    setEditing(p)
+    setTitle(p.title)
+    setSlug(p.slug)
+    setShowForm(true)
+  }
+
+  function resetForm() {
+    setShowForm(false)
+    setEditing(null)
+    setTitle("")
+    setSlug("")
+  }
+
+  async function save() {
     if (!title || !slug) return
     setSaving(true)
-    const res = await fetch("/api/pages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, slug }),
-    })
+    const body = { title, slug }
+    const res = editing
+      ? await fetch(`/api/pages/${editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      : await fetch("/api/pages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     if (res.ok) {
-      toast.success("Page created")
-      setShowForm(false)
-      setTitle("")
-      setSlug("")
+      toast.success(editing ? "Page updated" : "Page created")
+      resetForm()
       load()
     } else {
       const err = await res.json()
@@ -63,6 +75,15 @@ export default function PagesPage() {
     if (res.ok) { toast.success("Page deleted"); load() }
   }
 
+  async function toggle(id: string, isActive: boolean) {
+    await fetch(`/api/pages/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isActive: !isActive }),
+    })
+    load()
+  }
+
   const mainPage = { title: "Main Page", slug: "(main)", links: 0, isActive: true }
 
   if (loading) return <div className="p-4 text-sm text-muted-foreground">Loading...</div>
@@ -74,7 +95,7 @@ export default function PagesPage() {
           <h1 className="text-3xl font-bold">Multi Pages</h1>
           <p className="text-muted-foreground mt-1">Create multiple pages to organize your content</p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
+        <Button onClick={() => { if (!showForm) resetForm(); setShowForm(!showForm) }} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
           <Plus className="w-4 h-4 mr-2" /> Add Page
         </Button>
       </div>
@@ -92,10 +113,10 @@ export default function PagesPage() {
               <p className="text-xs text-muted-foreground">Your page will be at /username/{slug}</p>
             </div>
             <div className="flex gap-2">
-              <Button onClick={create} disabled={saving || !title || !slug} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
-                {saving ? "Creating..." : "Create Page"}
+              <Button onClick={save} disabled={saving || !title || !slug} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
+                {saving ? "Saving..." : editing ? "Update Page" : "Create Page"}
               </Button>
-              <Button variant="outline" onClick={() => setShowForm(false)} className="rounded-xl">Cancel</Button>
+              <Button variant="outline" onClick={resetForm} className="rounded-xl">Cancel</Button>
             </div>
           </CardContent>
         </Card>
@@ -125,7 +146,12 @@ export default function PagesPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant={p.isActive ? "success" : "secondary"}>{p.isActive ? "Active" : "Hidden"}</Badge>
+                <Button size="sm" variant="outline" onClick={() => startEdit(p)} className="rounded-lg text-xs">
+                  Edit
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => toggle(p.id, p.isActive)} className="rounded-lg text-xs">
+                  {p.isActive ? "Hide" : "Show"}
+                </Button>
                 <Button size="sm" variant="outline" onClick={() => remove(p.id)} className="rounded-lg text-xs text-red-500">
                   <Trash2 className="w-3 h-3" />
                 </Button>

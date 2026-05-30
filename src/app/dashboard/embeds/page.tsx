@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Music, Video, Headphones, Radio, Trash2, GripVertical } from "lucide-react"
+import { Plus, Music, Video, Headphones, Radio, Trash2 } from "lucide-react"
 import { toast } from "@/components/ui/toast"
 
 type Embed = {
@@ -31,6 +31,7 @@ export default function EmbedsPage() {
   const [embeds, setEmbeds] = useState<Embed[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [editing, setEditing] = useState<Embed | null>(null)
   const [type, setType] = useState("youtube")
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
@@ -44,23 +45,36 @@ export default function EmbedsPage() {
 
   useEffect(() => { load() }, [])
 
-  async function create() {
+  function startEdit(e: Embed) {
+    setEditing(e)
+    setType(e.type)
+    setTitle(e.title || "")
+    setUrl(e.url)
+    setShowForm(true)
+  }
+
+  function resetForm() {
+    setShowForm(false)
+    setEditing(null)
+    setType("youtube")
+    setTitle("")
+    setUrl("")
+  }
+
+  async function save() {
     if (!url) return
     setSaving(true)
-    const res = await fetch("/api/embeds", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type, title, url }),
-    })
+    const body = { type, title, url }
+    const res = editing
+      ? await fetch(`/api/embeds/${editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      : await fetch("/api/embeds", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     if (res.ok) {
-      toast.success("Embed added")
-      setShowForm(false)
-      setTitle("")
-      setUrl("")
+      toast.success(editing ? "Embed updated" : "Embed added")
+      resetForm()
       load()
     } else {
       const err = await res.json()
-      toast.error(err.error || "Error adding embed")
+      toast.error(err.error || "Error saving embed")
     }
     setSaving(false)
   }
@@ -68,6 +82,15 @@ export default function EmbedsPage() {
   async function remove(id: string) {
     const res = await fetch(`/api/embeds/${id}`, { method: "DELETE" })
     if (res.ok) { toast.success("Embed removed"); load() }
+  }
+
+  async function toggle(id: string, isActive: boolean) {
+    await fetch(`/api/embeds/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isActive: !isActive }),
+    })
+    load()
   }
 
   if (loading) return <div className="p-4 text-sm text-muted-foreground">Loading...</div>
@@ -79,7 +102,7 @@ export default function EmbedsPage() {
           <h1 className="text-3xl font-bold">Media Embeds</h1>
           <p className="text-muted-foreground mt-1">Add YouTube videos, Spotify tracks, podcasts, and more</p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
+        <Button onClick={() => { if (!showForm) resetForm(); setShowForm(!showForm) }} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
           <Plus className="w-4 h-4 mr-2" /> Add Embed
         </Button>
       </div>
@@ -110,10 +133,10 @@ export default function EmbedsPage() {
               <Input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://youtube.com/watch?v=..." />
             </div>
             <div className="flex gap-2">
-              <Button onClick={create} disabled={saving || !url} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
-                {saving ? "Adding..." : "Add Embed"}
+              <Button onClick={save} disabled={saving || !url} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
+                {saving ? "Saving..." : editing ? "Update Embed" : "Add Embed"}
               </Button>
-              <Button variant="outline" onClick={() => setShowForm(false)} className="rounded-xl">Cancel</Button>
+              <Button variant="outline" onClick={resetForm} className="rounded-xl">Cancel</Button>
             </div>
           </CardContent>
         </Card>
@@ -133,15 +156,16 @@ export default function EmbedsPage() {
               <CardContent className="pt-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    {embedTypes.find((et) => et.value === e.type)?.icon && (
-                      <span className="text-primary">{/* icon */}</span>
-                    )}
+                    {(() => {
+                      const et = embedTypes.find((et) => et.value === e.type)
+                      return et ? <et.icon className="w-5 h-5 text-primary" /> : null
+                    })()}
                     <div>
                       <h3 className="font-semibold text-sm">{e.title || e.type}</h3>
                       <p className="text-xs text-muted-foreground truncate max-w-[200px]">{e.url}</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="text-xs">{e.type}</Badge>
+                  <Badge variant={e.isActive ? "success" : "secondary"} className="text-xs">{e.type}</Badge>
                 </div>
                 {e.embedUrl && e.type === "youtube" && (
                   <div className="aspect-video rounded-lg overflow-hidden bg-black/5 mb-2">
@@ -155,6 +179,12 @@ export default function EmbedsPage() {
                   <iframe src={e.embedUrl} className="w-full h-[120px] rounded-lg" />
                 )}
                 <div className="flex items-center gap-2 mt-3">
+                  <Button size="sm" variant="outline" onClick={() => startEdit(e)} className="rounded-lg text-xs">
+                    Edit
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => toggle(e.id, e.isActive)} className="rounded-lg text-xs">
+                    {e.isActive ? "Pause" : "Activate"}
+                  </Button>
                   <Button size="sm" variant="outline" onClick={() => remove(e.id)} className="rounded-lg text-xs text-red-500">
                     <Trash2 className="w-3 h-3 mr-1" /> Remove
                   </Button>

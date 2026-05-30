@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Plus, DollarSign, Image as ImageIcon, Link as LinkIcon, Trash2, Download } from "lucide-react"
+import { Plus, DollarSign, Trash2 } from "lucide-react"
 import { toast } from "@/components/ui/toast"
 
 type Product = {
@@ -24,6 +24,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [editing, setEditing] = useState<Product | null>(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
@@ -40,26 +41,41 @@ export default function ProductsPage() {
 
   useEffect(() => { load() }, [])
 
-  async function create() {
+  function startEdit(p: Product) {
+    setEditing(p)
+    setTitle(p.title)
+    setDescription(p.description || "")
+    setPrice((p.price / 100).toFixed(2))
+    setFileUrl(p.fileUrl || "")
+    setFileType(p.fileType || "")
+    setImageUrl(p.imageUrl || "")
+    setShowForm(true)
+  }
+
+  function resetForm() {
+    setShowForm(false)
+    setEditing(null)
+    setTitle("")
+    setDescription("")
+    setPrice("")
+    setFileUrl("")
+    setFileType("")
+    setImageUrl("")
+  }
+
+  async function save() {
     if (!title || !price) return
     setSaving(true)
-    const res = await fetch("/api/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, price: parseFloat(price), fileUrl, fileType, imageUrl }),
-    })
+    const body = { title, description, price: parseFloat(price), fileUrl, fileType, imageUrl }
+    const res = editing
+      ? await fetch(`/api/products/${editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      : await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     if (res.ok) {
-      toast.success("Product created")
-      setShowForm(false)
-      setTitle("")
-      setDescription("")
-      setPrice("")
-      setFileUrl("")
-      setFileType("")
-      setImageUrl("")
+      toast.success(editing ? "Product updated" : "Product created")
+      resetForm()
       load()
     } else {
-      toast.error("Error creating product")
+      toast.error(editing ? "Error updating product" : "Error creating product")
     }
     setSaving(false)
   }
@@ -87,7 +103,7 @@ export default function ProductsPage() {
           <h1 className="text-3xl font-bold">Digital Products</h1>
           <p className="text-muted-foreground mt-1">Sell digital goods directly from your Flolio page</p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
+        <Button onClick={() => { if (!showForm) resetForm(); setShowForm(!showForm) }} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
           <Plus className="w-4 h-4 mr-2" /> Add Product
         </Button>
       </div>
@@ -122,10 +138,10 @@ export default function ProductsPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button onClick={create} disabled={saving || !title || !price} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
-                {saving ? "Creating..." : "Create Product"}
+              <Button onClick={save} disabled={saving || !title || !price} className="bg-[#c04a2b] hover:bg-[#a83d22] text-white rounded-xl">
+                {saving ? "Saving..." : editing ? "Update Product" : "Create Product"}
               </Button>
-              <Button variant="outline" onClick={() => setShowForm(false)} className="rounded-xl">Cancel</Button>
+              <Button variant="outline" onClick={resetForm} className="rounded-xl">Cancel</Button>
             </div>
           </CardContent>
         </Card>
@@ -156,6 +172,9 @@ export default function ProductsPage() {
                   {p.fileType && <span>{p.fileType}</span>}
                 </div>
                 <div className="flex items-center gap-2 mt-4">
+                  <Button size="sm" variant="outline" onClick={() => startEdit(p)} className="rounded-lg text-xs">
+                    Edit
+                  </Button>
                   <Button size="sm" variant="outline" onClick={() => toggle(p.id, p.isActive)} className="rounded-lg text-xs">
                     {p.isActive ? "Pause" : "Activate"}
                   </Button>

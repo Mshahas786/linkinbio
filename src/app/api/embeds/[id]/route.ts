@@ -15,9 +15,11 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const data = await req.json()
   const update: Record<string, any> = {}
   if (data.title !== undefined) update.title = data.title
+  const embedType = data.type || existing.type
+  if (data.type !== undefined) update.type = data.type
   if (data.url !== undefined) {
     update.url = data.url
-    update.embedUrl = generateEmbedUrl(existing.type, data.url)
+    update.embedUrl = generateEmbedUrl(embedType, data.url)
   }
   if (data.isActive !== undefined) update.isActive = data.isActive
   if (data.order !== undefined) update.order = data.order
