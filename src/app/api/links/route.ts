@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { title, url, icon, imageUrl, section, startsAt, expiresAt, utmSource, utmMedium, utmCampaign, utmContent } = await req.json()
+  const { title, url, icon, imageUrl, section, startsAt, expiresAt, utmSource, utmMedium, utmCampaign, utmContent, gateType, gateValue, pageId } = await req.json()
 
   if (!title || !url) {
     return NextResponse.json({ error: "Title and URL are required" }, { status: 400 })
@@ -73,6 +73,8 @@ export async function POST(req: Request) {
       ...(utmMedium && { utmMedium }),
       ...(utmCampaign && { utmCampaign }),
       ...(utmContent && { utmContent }),
+      ...(gateType && { gateType, gateValue: gateValue || null }),
+      ...(pageId && { pageId }),
     },
   })
 

@@ -45,6 +45,16 @@ export async function GET() {
       countdownDate: true,
       enableEmailCapture: true,
       emailCaptureTitle: true,
+      metaTitle: true,
+      metaDescription: true,
+      ogImageUrl: true,
+      tipEnabled: true,
+      tipVenmo: true,
+      tipPayPal: true,
+      tipCashApp: true,
+      dashboardTourDone: true,
+      showInstagramGrid: true,
+      gridColumns: true,
       customDomain: true,
       domainVerified: true,
     },
@@ -60,7 +70,7 @@ export async function PATCH(req: Request) {
   }
 
   const data = await req.json()
-  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape", "fontFamily", "fontSize", "linkBorderWidth", "linkShadow", "linkSpacing", "layoutMode", "hoverEffect", "showAvatar", "showBio", "headerImageUrl", "customCss", "isLocked", "pagePassword", "buttonBorderColor", "buttonFontWeight", "countdownTitle", "enableEmailCapture", "emailCaptureTitle"]
+  const allowed = ["name", "bio", "avatarUrl", "socialImage", "theme", "accentColor", "showBranding", "buttonStyle", "bioAlignment", "buttonTextColor", "backgroundColor", "avatarShape", "fontFamily", "fontSize", "linkBorderWidth", "linkShadow", "linkSpacing", "layoutMode", "hoverEffect", "showAvatar", "showBio", "headerImageUrl", "customCss", "isLocked", "pagePassword", "buttonBorderColor", "buttonFontWeight", "countdownTitle", "enableEmailCapture", "emailCaptureTitle", "metaTitle", "metaDescription", "ogImageUrl", "tipEnabled", "tipVenmo", "tipPayPal", "tipCashApp", "dashboardTourDone", "showInstagramGrid", "gridColumns"]
 
   const updateData: Record<string, any> = {}
   for (const key of allowed) {

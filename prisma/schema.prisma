@@ -45,13 +45,25 @@ model User {
   countdownDate   DateTime?
   enableEmailCapture Boolean @default(false)
   emailCaptureTitle String?
+  metaTitle       String?
+  metaDescription String?
+  ogImageUrl      String?
+  tipEnabled      Boolean  @default(false)
+  tipVenmo        String?
+  tipPayPal       String?
+  tipCashApp      String?
+  dashboardTourDone Boolean @default(false)
   customDomain    String?  @unique
   domainVerified Boolean @default(false)
-  referralCode  String?  @unique
-  referralCount Int      @default(0)
+  stripeCustomerId String?
+  referralCode     String?  @unique
+  referralCount    Int      @default(0)
   referredById  String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  showInstagramGrid Boolean @default(false)
+  gridColumns       Int     @default(2)
 
   referredBy   User?  @relation("Referrals", fields: [referredById], references: [id])
   referrals    User[] @relation("Referrals")
@@ -61,6 +73,10 @@ model User {
   socialLinks  SocialLink[]
   subscription Subscription?
   subscribers   Subscriber[]
+  products      Product[]
+  embeds        Embed[]
+  pages         Page[]
+  integrations  Integration[]
 }
 
 model Account {
@@ -115,11 +131,15 @@ model Link {
   utmMedium   String?
   utmCampaign String?
   utmContent  String?
+  gateType    String?   // subscribe, code, none
+  gateValue   String?   // the code for code-lock
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  pageId      String?
 
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   clickLogs ClickLog[]
+  page      Page?      @relation(fields: [pageId], references: [id])
 }
 
 model ClickLog {
@@ -170,4 +190,81 @@ model Subscriber {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, email])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  price       Int      // in cents
+  fileUrl     String?
+  fileType    String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  sold        Int      @default(0)
+  stripePriceId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sales ProductSale[]
+}
+
+model ProductSale {
+  id              String   @id @default(cuid())
+  productId       String
+  buyerEmail      String?
+  amount          Int
+  status          String   @default("completed")
+  stripePaymentId String?
+  createdAt       DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Embed {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // youtube, spotify, soundcloud, podcast, tiktok, apple_music
+  title     String?
+  url       String
+  embedUrl  String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  slug      String
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  links Link[]
+
+  @@unique([userId, slug])
+}
+
+model Integration {
+  id        String   @id @default(cuid())
+  userId    String
+  provider  String   // google_analytics, meta_pixel, tiktok_pixel, mailchimp, convertkit, kit
+  key       String?
+  value     String?
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
 }

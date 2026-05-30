@@ -61,20 +61,21 @@ export const authOptions: NextAuthOptions = {
 
       return true
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { username: true, subscription: { select: { status: true } } },
+        })
+        if (dbUser) {
+          token.username = dbUser.username || ""
+          token.isPro = dbUser.subscription?.status === "active"
+        }
       }
 
-      const dbUser = await prisma.user.findUnique({
-        where: { email: token.email! },
-        select: { id: true, username: true, subscription: { select: { status: true } } },
-      })
-
-      if (dbUser) {
-        token.id = dbUser.id
-        token.username = dbUser.username || ""
-        token.isPro = dbUser.subscription?.status === "active"
+      if (trigger === "update" && session) {
+        token = { ...token, ...session }
       }
 
       return token

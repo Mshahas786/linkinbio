@@ -17,6 +17,12 @@ import {
   Share2,
   Menu,
   X,
+  DollarSign,
+  Music,
+  FileText,
+  Puzzle,
+  Sparkles,
+  Key,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -24,8 +30,12 @@ const navItems = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/links", label: "Links", icon: LinkIcon },
   { href: "/dashboard/social", label: "Social", icon: Share2 },
+  { href: "/dashboard/products", label: "Products", icon: DollarSign },
+  { href: "/dashboard/embeds", label: "Embeds", icon: Music },
+  { href: "/dashboard/pages", label: "Pages", icon: FileText },
   { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/dashboard/integrations", label: "Integrations", icon: Puzzle },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ]

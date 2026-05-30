@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, LayoutGrid, Image, Eye, EyeOff, Box, Mail, Code, Clock } from "lucide-react"
+import { Crown, Lock, Check, Sparkles, Type, AlignLeft, Square, LayoutGrid, Image, Eye, EyeOff, Box, Mail, Code, Clock, Search, Heart } from "lucide-react"
 import { themes, proThemes, buttonStyles, avatarShapes, alignmentOptions } from "@/lib/themes"
 import { fontFamilies, fontSizeOptions, borderWidthOptions, shadowOptions, spacingOptions, layoutModes, hoverEffects, fontWeightOptions } from "@/lib/customization"
 
@@ -18,6 +18,7 @@ const presetColors = [
 export default function AppearancePage() {
   const { data: session, update } = useSession()
   const isPro = (session?.user as any)?.isPro
+  const userName = session?.user?.name || ""
   const [accentColor, setAccentColor] = useState("#c04a2b")
   const [theme, setTheme] = useState("default")
   const [showBranding, setShowBranding] = useState(true)
@@ -45,6 +46,13 @@ export default function AppearancePage() {
   const [countdownDate, setCountdownDate] = useState("")
   const [enableEmailCapture, setEnableEmailCapture] = useState(false)
   const [emailCaptureTitle, setEmailCaptureTitle] = useState("")
+  const [metaTitle, setMetaTitle] = useState("")
+  const [metaDescription, setMetaDescription] = useState("")
+  const [ogImageUrl, setOgImageUrl] = useState("")
+  const [tipEnabled, setTipEnabled] = useState(false)
+  const [tipVenmo, setTipVenmo] = useState("")
+  const [tipPayPal, setTipPayPal] = useState("")
+  const [tipCashApp, setTipCashApp] = useState("")
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState("")
@@ -85,6 +93,13 @@ export default function AppearancePage() {
         setCountdownDate(data.countdownDate ? new Date(data.countdownDate).toISOString().slice(0, 16) : "")
         setEnableEmailCapture(data.enableEmailCapture ?? false)
         setEmailCaptureTitle(data.emailCaptureTitle || "")
+        setMetaTitle(data.metaTitle || "")
+        setMetaDescription(data.metaDescription || "")
+        setOgImageUrl(data.ogImageUrl || "")
+        setTipEnabled(data.tipEnabled ?? false)
+        setTipVenmo(data.tipVenmo || "")
+        setTipPayPal(data.tipPayPal || "")
+        setTipCashApp(data.tipCashApp || "")
       }
       if (referralRes?.ok) {
         const data = await referralRes.json()
@@ -100,6 +115,23 @@ export default function AppearancePage() {
     setTheme(themeId)
   }
 
+  const themePresets = [
+    { id: "clean", name: "Clean", theme: "default", buttonStyle: "rounded", hoverEffect: "lift", layoutMode: "list", swatch: "bg-gradient-to-br from-gray-50 to-white" },
+    { id: "bold", name: "Bold", theme: "dark", buttonStyle: "pill", hoverEffect: "glow", layoutMode: "list", swatch: "bg-gradient-to-br from-gray-900 to-gray-800" },
+    { id: "playful", name: "Playful", theme: "sunset", buttonStyle: "pill", hoverEffect: "scale", layoutMode: "grid", swatch: "bg-gradient-to-br from-orange-50 to-rose-50" },
+    { id: "modern", name: "Modern", theme: "mint", buttonStyle: "square", hoverEffect: "slide", layoutMode: "list", swatch: "bg-gradient-to-br from-emerald-50 to-teal-50" },
+    { id: "elegant", name: "Elegant", theme: "lavender", buttonStyle: "rounded", hoverEffect: "lift", layoutMode: "list", swatch: "bg-gradient-to-br from-violet-50 to-purple-50", isPro: true },
+    { id: "edgy", name: "Edgy", theme: "midnight", buttonStyle: "square", hoverEffect: "none", layoutMode: "grid", swatch: "bg-gradient-to-br from-indigo-950 to-slate-900", isPro: true },
+  ]
+
+  function applyPreset(preset: typeof themePresets[number]) {
+    if (preset.isPro && !isPro) return
+    setTheme(preset.theme)
+    setButtonStyle(preset.buttonStyle)
+    setHoverEffect(preset.hoverEffect)
+    setLayoutMode(preset.layoutMode)
+  }
+
   async function save() {
     setSaving(true)
     setMessage("")
@@ -109,6 +141,7 @@ export default function AppearancePage() {
       fontFamily, fontSize, linkBorderWidth, linkShadow, linkSpacing,
       layoutMode, hoverEffect, showAvatar, showBio,
       isLocked, pagePassword, buttonFontWeight, enableEmailCapture, emailCaptureTitle, countdownTitle,
+      metaTitle, metaDescription, ogImageUrl, tipEnabled, tipVenmo, tipPayPal, tipCashApp,
     }
     if (isPro) {
       body.buttonTextColor = buttonTextColor
@@ -808,6 +841,96 @@ export default function AppearancePage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Search className="w-5 h-5 text-primary" />
+            SEO & Meta Tags
+          </CardTitle>
+          <CardDescription>Customize how your page appears in search results and social shares</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground">Page Title</label>
+            <Input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} placeholder={`${userName || "Your Name"} | Flolio`} />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground">Meta Description</label>
+            <textarea
+              value={metaDescription}
+              onChange={(e) => setMetaDescription(e.target.value)}
+              placeholder="A short description for search engines"
+              className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground">OG Image URL</label>
+            <Input value={ogImageUrl} onChange={(e) => setOgImageUrl(e.target.value)} placeholder="https://example.com/social-card.jpg" />
+            {ogImageUrl && <img src={ogImageUrl} alt="" className="w-full h-24 object-cover rounded-lg border" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Heart className="w-5 h-5 text-primary" />
+            Tip Jar
+          </CardTitle>
+          <CardDescription>Let visitors support you with donations</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" checked={tipEnabled} onChange={(e) => setTipEnabled(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary" />
+            <span className="text-sm">Enable tip jar on my page</span>
+          </label>
+          {tipEnabled && (
+            <div className="space-y-3 pl-7">
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Venmo Handle</label>
+                <Input value={tipVenmo} onChange={(e) => setTipVenmo(e.target.value)} placeholder="@username" />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">PayPal Handle</label>
+                <Input value={tipPayPal} onChange={(e) => setTipPayPal(e.target.value)} placeholder="@username" />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Cash App Handle</label>
+                <Input value={tipCashApp} onChange={(e) => setTipCashApp(e.target.value)} placeholder="$cashtag" />
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-primary" />
+            Theme Presets
+          </CardTitle>
+          <CardDescription>Apply a complete style bundle in one click</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {themePresets.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => applyPreset(preset)}
+                className={`flex flex-col items-center gap-2 py-4 px-3 text-sm font-medium border-2 rounded-xl transition-all ${
+                  theme === preset.theme && buttonStyle === preset.buttonStyle && hoverEffect === preset.hoverEffect && layoutMode === preset.layoutMode
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
+                }`}
+              >
+                <div className={`w-full h-10 rounded-lg ${preset.swatch}`} />
+                <span>{preset.name}</span>
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

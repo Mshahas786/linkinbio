@@ -10,16 +10,17 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const subscription = await prisma.subscription.findUnique({
-    where: { userId: session.user.id },
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { stripeCustomerId: true },
   })
 
-  if (!subscription?.stripeId) {
+  if (!user?.stripeCustomerId) {
     return NextResponse.json({ error: "No active subscription" }, { status: 400 })
   }
 
   const portalSession = await stripe.billingPortal.sessions.create({
-    customer: subscription.stripeId,
+    customer: user.stripeCustomerId,
     return_url: `${process.env.APP_URL || "http://localhost:3000"}/dashboard/settings`,
   })
 

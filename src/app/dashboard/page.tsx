@@ -4,7 +4,15 @@ import prisma from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { BarChart3, Link as LinkIcon, MousePointerClick, Crown, QrCode } from "lucide-react"
+import { Link as LinkIcon, MousePointerClick, Crown, QrCode } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
+
+type Stat = {
+  label: string
+  value: string | number
+  icon: LucideIcon
+  badge?: "success" | "secondary"
+}
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -24,7 +32,7 @@ export default async function DashboardPage() {
     take: 5,
   })
 
-  const stats = [
+  const stats: Stat[] = [
     { label: "Total Links", value: linkCount, icon: LinkIcon },
     { label: "Total Clicks", value: totalClicks._sum.clicks ?? 0, icon: MousePointerClick },
     {
@@ -54,8 +62,8 @@ export default async function DashboardPage() {
             <CardContent>
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold">{s.value}</span>
-                {(s as any).badge && (
-                  <Badge variant={(s as any).badge}>{s.value}</Badge>
+                {s.badge && (
+                  <Badge variant={s.badge}>{s.value}</Badge>
                 )}
               </div>
             </CardContent>

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { stripe, PRO_PRICE_ID } from "@/lib/stripe"
+import { stripe, PRO_PRICE_ID, getOrCreateCustomer } from "@/lib/stripe"
 import { absoluteUrl } from "@/lib/utils"
 import prisma from "@/lib/prisma"
 
@@ -26,18 +26,19 @@ export async function POST() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: { subscription: true },
+    select: { id: true, email: true },
   })
 
-  if (!user) {
+  if (!user?.email) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
 
+  const customerId = await getOrCreateCustomer(user.id, user.email)
+
   const stripeSession = await stripe.checkout.sessions.create({
     mode: "subscription",
-    payment_method_types: ["card"],
     line_items: [{ price: PRO_PRICE_ID, quantity: 1 }],
-    customer_email: user.email!,
+    customer: customerId,
     metadata: { userId: user.id },
     success_url: `${absoluteUrl("/dashboard/billing?success=true")}`,
     cancel_url: `${absoluteUrl("/dashboard/billing?canceled=true")}`,

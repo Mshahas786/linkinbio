@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import type Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import prisma from "@/lib/prisma"
 
@@ -6,7 +7,7 @@ export async function POST(req: Request) {
   const body = await req.text()
   const sig = req.headers.get("stripe-signature")!
 
-  let event
+  let event: Stripe.Event
 
   try {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
@@ -16,30 +17,40 @@ export async function POST(req: Request) {
 
   switch (event.type) {
     case "checkout.session.completed": {
-      const session = event.data.object as any
+      const session = event.data.object as Stripe.Checkout.Session
       const userId = session.metadata?.userId
 
-      if (userId) {
-        await prisma.subscription.upsert({
-          where: { userId },
-          update: {
-            stripeId: session.subscription,
-            status: "active",
-            currentPeriodStart: new Date(session.created * 1000),
-          },
-          create: {
-            userId,
-            stripeId: session.subscription,
-            status: "active",
-          },
+      if (userId && session.customer) {
+        const customerId = typeof session.customer === "string" ? session.customer : session.customer.id
+
+        await prisma.user.update({
+          where: { id: userId },
+          data: { stripeCustomerId: customerId },
         })
+
+        if (session.subscription) {
+          const subId = typeof session.subscription === "string" ? session.subscription : session.subscription.id
+          await prisma.subscription.upsert({
+            where: { userId },
+            update: {
+              stripeId: subId,
+              status: "active",
+              currentPeriodStart: session.created ? new Date(session.created * 1000) : null,
+            },
+            create: {
+              userId,
+              stripeId: subId,
+              status: "active",
+            },
+          })
+        }
       }
       break
     }
 
     case "customer.subscription.updated":
     case "customer.subscription.deleted": {
-      const sub = event.data.object as any
+      const sub = event.data.object as Stripe.Subscription
       const subscription = await prisma.subscription.findUnique({
         where: { stripeId: sub.id },
       })
