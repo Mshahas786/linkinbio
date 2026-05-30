@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Check, X, Loader2 } from "lucide-react"
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -13,6 +14,29 @@ export default function OnboardingPage() {
   const [username, setUsername] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [availability, setAvailability] = useState<"idle" | "checking" | "available" | "taken" | "invalid">("idle")
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>()
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+
+    const val = username
+    if (!val) { setAvailability("idle"); return }
+    if (!val.match(/^[a-zA-Z0-9_]{3,20}$/)) { setAvailability("invalid"); return }
+
+    setAvailability("checking")
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/username-check?username=${encodeURIComponent(val)}`)
+        const data = await res.json()
+        setAvailability(data.available ? "available" : "taken")
+      } catch {
+        setAvailability("idle")
+      }
+    }, 400)
+
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
+  }, [username])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -21,6 +45,12 @@ export default function OnboardingPage() {
 
     if (!username.match(/^[a-zA-Z0-9_]{3,20}$/)) {
       setError("Username must be 3-20 characters (letters, numbers, underscores)")
+      setLoading(false)
+      return
+    }
+
+    if (availability === "taken") {
+      setError("Username already taken — please choose another")
       setLoading(false)
       return
     }
@@ -76,13 +106,23 @@ export default function OnboardingPage() {
                   className="flex-1 bg-transparent px-1 py-2 text-sm outline-none"
                   placeholder="username"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))}
+                  onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase())}
                   required
                   minLength={3}
                   maxLength={20}
+                  spellCheck={false}
                 />
+                <div className="w-5 shrink-0">
+                  {availability === "checking" && <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />}
+                  {availability === "available" && <Check className="w-4 h-4 text-green-500" />}
+                  {availability === "taken" && <X className="w-4 h-4 text-red-500" />}
+                  {availability === "invalid" && <X className="w-4 h-4 text-amber-500" />}
+                </div>
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
+              {availability === "available" && <p className="text-xs text-green-600">Username available!</p>}
+              {availability === "taken" && <p className="text-xs text-red-600">Username taken — try another</p>}
+              {availability === "invalid" && <p className="text-xs text-amber-600">Letters, numbers, underscores only, 3-20 chars</p>}
               <p className="text-xs text-muted-foreground">
                 Letters, numbers, and underscores. 3-20 characters.
               </p>
