@@ -90,7 +90,7 @@ function SortableLinkCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`rounded-lg border bg-card hover:bg-gray-50 transition-colors ${isDragging ? "shadow-lg z-10" : ""}`}
+      className={`rounded-lg border bg-card hover:bg-accent/50 transition-colors ${isDragging ? "shadow-lg z-10" : ""}`}
     >
       <div className="flex items-start gap-3 p-3">
         <button
@@ -126,7 +126,7 @@ function SortableLinkCard({
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onToggleLink(link.id, link.isActive)}>
             {link.isActive ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => onDeleteLink(link.id)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-destructive/10" onClick={() => onDeleteLink(link.id)}>
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
         </div>

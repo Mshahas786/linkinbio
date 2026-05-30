@@ -36,10 +36,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/[0.08] via-background to-primary/[0.04] px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <Link href="/" className="text-xl font-bold text-indigo-600 mb-2 block">
+          <Link href="/" className="text-xl font-bold text-primary mb-2 block">
             Flolio
           </Link>
           <CardTitle>Welcome back</CardTitle>
@@ -115,7 +115,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/register" className="text-primary hover:underline font-medium">
               Sign up
             </Link>
           </p>

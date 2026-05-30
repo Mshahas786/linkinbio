@@ -1,9 +1,19 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Sora, DM_Sans } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/providers"
 
-const inter = Inter({ subsets: ["latin"] })
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
+})
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +45,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${sora.variable} ${dmSans.variable} font-body`}>
         <Providers>{children}</Providers>
       </body>
     </html>

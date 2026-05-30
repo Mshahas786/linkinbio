@@ -71,7 +71,7 @@ function RegisterForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <Link href="/" className="text-xl font-bold text-indigo-600 mb-2 block">Flolio</Link>
+        <Link href="/" className="text-xl font-bold text-primary mb-2 block">Flolio</Link>
         <CardTitle>Create your account</CardTitle>
         <CardDescription>Get your link-in-bio page in minutes</CardDescription>
       </CardHeader>
@@ -122,7 +122,7 @@ function RegisterForm() {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-indigo-600 hover:underline font-medium">Sign in</Link>
+          <Link href="/login" className="text-primary hover:underline font-medium">Sign in</Link>
         </p>
       </CardContent>
     </Card>
@@ -131,7 +131,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/[0.08] via-background to-primary/[0.04] px-4">
       <Suspense fallback={<Card className="w-full max-w-md"><CardContent className="p-8"><p className="text-center text-muted-foreground">Loading...</p></CardContent></Card>}>
         <RegisterForm />
       </Suspense>

@@ -41,7 +41,7 @@ export function TestimonialCarousel() {
           <p className="text-gray-700 text-lg leading-relaxed">&ldquo;{t.text}&rdquo;</p>
         </div>
         <div className="flex items-center gap-3 mt-6">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c04a2b] to-[#d4704f] text-white text-xs font-bold flex items-center justify-center">
             {t.avatar}
           </div>
           <div>
@@ -54,7 +54,7 @@ export function TestimonialCarousel() {
       <div className="flex items-center justify-center gap-3 mt-6">
         <button
           onClick={() => setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length)}
-          className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+          className="p-1.5 rounded-full hover:bg-accent transition-colors"
         >
           <ChevronLeft className="w-4 h-4 text-gray-500" />
         </button>
@@ -64,14 +64,14 @@ export function TestimonialCarousel() {
               key={i}
               onClick={() => setCurrent(i)}
               className={`w-2 h-2 rounded-full transition-all ${
-                i === current ? "bg-indigo-600 w-6" : "bg-gray-300"
+                i === current ? "bg-primary w-6" : "bg-gray-300"
               }`}
             />
           ))}
         </div>
         <button
           onClick={() => setCurrent((c) => (c + 1) % testimonials.length)}
-          className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+          className="p-1.5 rounded-full hover:bg-accent transition-colors"
         >
           <ChevronRight className="w-4 h-4 text-gray-500" />
         </button>

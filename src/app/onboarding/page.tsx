@@ -60,7 +60,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/[0.08] via-background to-primary/[0.04] px-4">
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle>Welcome to Flolio!</CardTitle>

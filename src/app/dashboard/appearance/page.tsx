@@ -9,7 +9,7 @@ import { Crown, Lock, Check, Sparkles } from "lucide-react"
 import { themes, proThemes, buttonStyles, avatarShapes, alignmentOptions } from "@/lib/themes"
 
 const presetColors = [
-  "#6366f1", "#8b5cf6", "#ec4899", "#ef4444",
+  "#c04a2b", "#d46845", "#e8926e", "#ef4444",
   "#f97316", "#eab308", "#22c55e", "#14b8a6",
   "#06b6d4", "#3b82f6", "#6b7280", "#000000",
 ]
@@ -17,7 +17,7 @@ const presetColors = [
 export default function AppearancePage() {
   const { data: session, update } = useSession()
   const isPro = (session?.user as any)?.isPro
-  const [accentColor, setAccentColor] = useState("#6366f1")
+  const [accentColor, setAccentColor] = useState("#c04a2b")
   const [theme, setTheme] = useState("default")
   const [showBranding, setShowBranding] = useState(true)
   const [buttonStyle, setButtonStyle] = useState("rounded")
@@ -38,7 +38,7 @@ export default function AppearancePage() {
       ])
       if (settingsRes.ok) {
         const data = await settingsRes.json()
-        setAccentColor(data.accentColor || "#6366f1")
+        setAccentColor(data.accentColor || "#c04a2b")
         setTheme(data.theme || "default")
         setShowBranding(data.showBranding ?? true)
         setButtonStyle(data.buttonStyle || "rounded")
@@ -120,7 +120,7 @@ export default function AppearancePage() {
                   disabled={isLocked}
                   className={`relative h-20 rounded-lg bg-gradient-to-b ${t.gradient} border-2 transition-all ${
                     isSelected
-                      ? "border-indigo-600 scale-105"
+                      ? "border-primary scale-105"
                       : isLocked
                       ? "border-gray-200 opacity-50 cursor-not-allowed"
                       : "border-gray-200 hover:border-gray-300"
@@ -230,7 +230,7 @@ export default function AppearancePage() {
                 onClick={() => setButtonStyle(bs.id)}
                 className={`flex-1 py-4 px-4 text-sm font-medium border-2 rounded-xl transition-all ${
                   buttonStyle === bs.id
-                    ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                    ? "border-primary bg-primary/10 text-primary"
                     : "border-gray-200 hover:border-gray-300 text-gray-700"
                 }`}
               >
@@ -255,7 +255,7 @@ export default function AppearancePage() {
                 onClick={() => setBioAlignment(opt.id)}
                 className={`flex-1 py-3 px-4 text-sm font-medium border-2 rounded-xl transition-all ${
                   bioAlignment === opt.id
-                    ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                    ? "border-primary bg-primary/10 text-primary"
                     : "border-gray-200 hover:border-gray-300 text-gray-700"
                 }`}
               >
@@ -315,8 +315,8 @@ export default function AppearancePage() {
                   onClick={() => setAvatarShape(shape.id)}
                   className={`flex-1 py-4 px-4 text-sm font-medium border-2 rounded-xl transition-all ${
                     avatarShape === shape.id
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-700"
-                      : "border-gray-200 hover:border-gray-300 text-gray-700"
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-200 hover:border-gray-300 text-gray-700"
                   }`}
                 >
                   <div className={`w-12 h-12 bg-gray-300 mx-auto mb-2 ${shape.className}`} />
@@ -346,7 +346,7 @@ export default function AppearancePage() {
               checked={showBranding}
               onChange={(e) => setShowBranding(e.target.checked)}
               disabled={!canToggleBranding}
-              className="w-4 h-4 rounded border-gray-300 text-indigo-600 disabled:opacity-50"
+              className="w-4 h-4 rounded border-gray-300 text-primary disabled:opacity-50"
             />
             <span className="text-sm">Show &quot;Powered by Flolio&quot; on my page</span>
           </label>

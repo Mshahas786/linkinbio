@@ -69,7 +69,7 @@ export default async function DashboardPage() {
           {recentLinks.length === 0 ? (
             <p className="text-muted-foreground text-sm">
               No links yet.{" "}
-              <a href="/dashboard/links" className="text-indigo-600 hover:underline">
+              <a href="/dashboard/links" className="text-primary hover:underline">
                 Add your first link
               </a>
             </p>

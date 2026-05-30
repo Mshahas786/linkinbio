@@ -63,7 +63,7 @@ function SortableSocialCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`rounded-lg border bg-card hover:bg-gray-50 transition-colors ${isDragging ? "shadow-lg z-10" : ""}`}
+      className={`rounded-lg border bg-card hover:bg-accent/50 transition-colors ${isDragging ? "shadow-lg z-10" : ""}`}
     >
       <div className="flex items-start gap-3 p-3">
         <button
@@ -96,7 +96,7 @@ function SortableSocialCard({
               <ExternalLink className="w-3.5 h-3.5" />
             </Button>
           </a>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => onDelete(social.id)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-destructive/10" onClick={() => onDelete(social.id)}>
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
         </div>
@@ -217,7 +217,7 @@ export default function SocialPage() {
                       onClick={() => setSelectedPlatform(p.id)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-all ${
                         selectedPlatform === p.id
-                          ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                          ? "border-primary bg-primary/10 text-primary"
                           : "border-gray-200 hover:border-gray-300 text-gray-700"
                       }`}
                     >

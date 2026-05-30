@@ -39,13 +39,13 @@ export default function AnalyticsPage() {
         <p className="text-muted-foreground mt-1">Track your link performance</p>
       </div>
 
-      <Card className="bg-indigo-50 border-indigo-100">
+      <Card className="bg-primary/10 border-primary/20">
         <CardContent className="pt-6">
           <div className="flex items-center gap-3">
-            <MousePointerClick className="w-8 h-8 text-indigo-600" />
+            <MousePointerClick className="w-8 h-8 text-primary" />
             <div>
-              <p className="text-sm text-indigo-600 font-medium">Total Clicks</p>
-              <p className="text-3xl font-bold text-indigo-900">{totalClicks}</p>
+              <p className="text-sm text-primary font-medium">Total Clicks</p>
+              <p className="text-3xl font-bold text-primary">{totalClicks}</p>
             </div>
           </div>
         </CardContent>
@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
                       </Badge>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-indigo-600">{link.clicks} clicks</span>
+                      <span className="text-sm font-semibold text-primary">{link.clicks} clicks</span>
                       {isPro && (
                         <Button
                           variant="ghost"
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
                     <div
-                      className="bg-indigo-500 h-2 rounded-full transition-all"
+                      className="bg-primary h-2 rounded-full transition-all"
                       style={{ width: `${(link.clicks / maxClicks) * 100}%` }}
                     />
                   </div>

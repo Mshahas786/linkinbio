@@ -49,7 +49,7 @@ export default function BillingPage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className={isPro ? "border-indigo-300 ring-2 ring-indigo-200" : ""}>
+        <Card className={isPro ? "border-primary/50 ring-2 ring-primary/30" : ""}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Free
@@ -73,7 +73,7 @@ export default function BillingPage() {
           </CardContent>
         </Card>
 
-        <Card className={isPro ? "border-indigo-300 ring-2 ring-indigo-200" : ""}>
+        <Card className={isPro ? "border-primary/50 ring-2 ring-primary/30" : ""}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">

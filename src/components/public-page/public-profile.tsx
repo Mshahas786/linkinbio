@@ -89,11 +89,11 @@ export function PublicProfile({
           <img
             src={avatarUrl}
             alt={name}
-            className={`w-24 h-24 mx-auto mb-4 object-cover border-4 shadow-md ${activeAvatarShape.className} ${bioAlignment === "left" ? "ml-0" : ""}`}
+            className={`w-24 h-24 mx-auto mb-4 object-cover border-4 shadow-lg ${activeAvatarShape.className} ${bioAlignment === "left" ? "ml-0" : ""}`}
             style={{ borderColor: accentColor }}
           />
         )}
-        <h1 className={`text-2xl font-bold mb-1 ${activeTheme.textClass}`}>{name}</h1>
+        <h1 className={`font-heading text-2xl font-bold mb-1 ${activeTheme.textClass}`}>{name}</h1>
         {bio && <p className={`text-gray-600 mb-4 ${bioAlignment === "left" ? "" : ""}`}>{bio}</p>}
         {socialLinks && socialLinks.length > 0 && (
           <div className={`flex items-center gap-3 mb-6 flex-wrap ${bioAlignment === "left" ? "justify-start" : "justify-center"}`}>

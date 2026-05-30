@@ -162,7 +162,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Globe className="w-5 h-5 text-indigo-500" />
+            <Globe className="w-5 h-5 text-primary" />
             Custom Domain
             {!isPro && (
               <span className="inline-flex items-center gap-1 text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full">
