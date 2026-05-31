@@ -64,6 +64,7 @@ export default async function DomainProfilePage({ params }: { params: { domain: 
 
   return (
     <PublicProfile
+      username={user.username || "user"}
       name={user.name || user.username || "User"}
       bio={user.bio || undefined}
       avatarUrl={user.avatarUrl || undefined}
